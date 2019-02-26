@@ -6,12 +6,13 @@
 - CodeDeploy
 - CodePipeline
 - S3やCloudwatchなど暗黙的に利用するサービスは割愛
-## 事前準備
-### 最低限ここは読んでおいてください
+## 最低限ここは読んでおいてください
 - [CodeDeploy AppSpec File リファレンス](https://docs.aws.amazon.com/ja_jp/codedeploy/latest/userguide/reference-appspec-file.html)
   - ECへのデプロイは、`files`,`permissions`,`hooks`が必要
-### EC2へCodeDeployをインストールする
-- ここを参考にしてインストールする
+- [EC2/オンプレミス のデプロイ向けの AppSpec の「hooks」セクション](https://docs.aws.amazon.com/ja_jp/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-server)
+  - 環境変数があるので、それを使うとある程度の切り分けは可能
+## インストールおよび設定
+- EC2にエージェントをインストールする
   - [Amazon Linux または RHEL 用の CodeDeploy エージェントのインストールまたは再インストール](https://docs.aws.amazon.com/ja_jp/codedeploy/latest/userguide/codedeploy-agent-operations-install-linux.html)
 - デフォルトのロールが嫌いな場合は、ロールを作成しておきます。
   - 参考：[ステップ 3: CodeDeploy のサービスロールを作成する](https://docs.aws.amazon.com/ja_jp/codedeploy/latest/userguide/getting-started-create-service-role.html)
@@ -83,9 +84,28 @@ hooks:
 
 ```
 ## 注意点
-- hooksで指定するスクリプトはリポジトリに含めておく。その際、実行権限をつけておく必要がある。gitの場合は、`git add`する前にローカルPC上で+xをつけておくこと。`appspec.yml`でスクリプトに実行権限をつけても無駄です。
-  - 参考URL: [CodeDeployフックのベストプラクティス](https://dev.classmethod.jp/cloud/aws/best-practice-of-code-deploy-hooks/)
-### 参照するファイル
+- hooksで指定するスクリプトはリポジトリに含めておく。その際、実行権限をつけておく必要がある。gitの場合は、`git add`する前にローカルPC上で+xをつけておくこと。`appspec.yml`でスクリプトに実行権限をつけても無駄です。忘れていると実行されずに、成功扱いで処理が継続します。これは、hooksのスクリプトはインストール後のファイルが実行されるのではなく、codedeploy-agentが管理しているディレクトリのファイルが実行されるからです。
+  - hooksで実行されるスクリプト
+    - /opt/codedeploy-agent/deployment-root/配下にあるファイル
+  - permissionsで指定しているファイル
+    - インストールされたファイル（フルパスで指定してますからね）
+  - AWSの公式ドキュメントには明確な記載はありませんので以下を参考ください 
+    - 参考URL: [CodeDeployフックのベストプラクティス](https://dev.classmethod.jp/cloud/aws/best-practice-of-code-deploy-hooks/)
+- hooksで指定するスクリプト
+  - configファイルをgitリポジトリに含んだ場合は、インストール後のファイルをcpしてください。hooksのlocationのように、config/config.json　と書いても参照できません。
+``` AfterInstall.sh
+#!/bin/sh
+
+# AfterInstall.sh 
+CONFIGDIR='/data/var/www/pcx/config'
+INSTALLDIR='/data/var/www/pcx/html/powercmsx'
+cp $CONFIGDIR/config.json $INSTALLDIR/config.json
+cp $CONFIGDIR/db-config.php $INSTALLDIR/db-config.php
+chown apache:root $INSTALLDIR/config.json
+chown apache:root $INSTALLDIR/db-config.php
+```
+
+## デバッグ等で参照するファイル
 - CodeDeploy Agentのログファイル
   - /var/log/aws/codedeploy-agent/codedeploy-agent.log
 - hooksで実行されたスクリプトのログ
