@@ -84,13 +84,12 @@ hooks:
 
 ```
 ## 注意点
-- hooksで指定するスクリプトはリポジトリに含めておく。その際、実行権限をつけておく必要がある。gitの場合は、`git add`する前にローカルPC上で+xをつけておくこと。`appspec.yml`でスクリプトに実行権限をつけても無駄です。忘れていると実行されずに、成功扱いで処理が継続します。これは、hooksのスクリプトはインストール後のファイルが実行されるのではなく、codedeploy-agentが管理しているディレクトリのファイルが実行されるからです。
+- hooksで指定するスクリプトはリポジトリに含めておく。その際、実行権限をつけておく必要がある。gitの場合は、`git add`する前にローカルPC上で+xをつけておくこと。`appspec.yml`でスクリプトに実行権限をつけても無駄です。実行権限はインストールされた後のファイルに対して行っています（下記参照）。忘れていると実行されずに、成功扱いで処理が継続します。これは、hooksのスクリプトはインストール後のファイルが実行されるのではなく、codedeploy-agentが管理しているディレクトリのファイルが実行されるからです。
   - hooksで実行されるスクリプト
-    - /opt/codedeploy-agent/deployment-root/配下にあるファイル
+    - /opt/codedeploy-agent/deployment-root/配下にあるファイルが実行される
   - permissionsで指定しているファイル
-    - インストールされたファイル（フルパスで指定してますからね）
-  - AWSの公式ドキュメントには明確な記載はありませんので以下を参考ください 
-    - 参考URL: [CodeDeployフックのベストプラクティス](https://dev.classmethod.jp/cloud/aws/best-practice-of-code-deploy-hooks/)
+    - インストールされたファイル（フルパスで指定してますからね）のパーミッションが変更される
+
 - hooksで指定するスクリプト
   - configファイルをgitリポジトリに含んだ場合は、インストール後のファイルをcpしてください。hooksのlocationのように、config/config.json　と書いても参照できません。
 ``` AfterInstall.sh
@@ -114,3 +113,4 @@ chown apache:root $INSTALLDIR/db-config.php
   - /etc/codedeploy-agent/conf/codedeployagent.yml
 ## 参考するサイト
 - https://dev.classmethod.jp/referencecat/aws-codedeploy/
+- [CodeDeployフックのベストプラクティス](https://dev.classmethod.jp/cloud/aws/best-practice-of-code-deploy-hooks/)
