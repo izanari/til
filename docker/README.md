@@ -32,8 +32,3 @@ RUN set -x && \
   - 参照URL: https://docs.docker.com/docker-for-mac/networking/
   - サンプル：`echo 'xdebug.remote_host=host.docker.internal'; `
 
-
-dockerコンテナが起動しない
-https://gendosu.jp/archives/2838
-https://qiita.com/ryurock/items/d1372e9b4d561343a308
-wordpress_1  | sed: -e expression #1, char 75: unterminated `s' command

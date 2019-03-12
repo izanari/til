@@ -1,5 +1,5 @@
 # WordPressの開発環境を作る
-- [Dockerfile](./Dockerfile.debug)を作成する
+- [Dockerfile](./docker/Dockerfile.debug)を作成する
 - [dokcer-compose.yml](./docker-compose.yml)を作成する
 - vscodeの`PHP Debug`をインストールする
   - launch.json は以下とする。`pathMappings`以外はデフォルト設定です。
