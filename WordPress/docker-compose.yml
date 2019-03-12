@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:5.7.25
+    command: "--explicit_defaults_for_timestamp --innodb-use-native-aio=0"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: HogeFuga_2019
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: systemuser
+      MYSQL_PASSWORD: wordpass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+  wordpress-debug:
+    #image: wordpress:5.0.3-php7.3
+    build: 
+      context: ./docker/
+      dockerfile: Dockerfile.debug
+    volumes: 
+      - ./html:/var/www/html
+    depends_on:
+      - db
+    ports:
+      - 80:80
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: systemuser
+      WORDPRESS_DB_PASSWORD: wordpass
+      WORDPRESS_DEBUG: "true"
