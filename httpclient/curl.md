@@ -20,3 +20,8 @@ curl -k https://hogehoge
 curl https://hogehoge -u foo
 ```
 パスワードの指定まで行う場合は、foo:passとする
+
+- HTTPヘッダーを付与してアクセスする
+```
+curl -H 'x-from-hogehoge: true' http://hogehoge
+```
