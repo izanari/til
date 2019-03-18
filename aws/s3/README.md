@@ -29,6 +29,8 @@ aws s3api put-object --bucket mybucket --key index.html --website-redirect-locat
 ## アクセスコントロール
 ### バケットポリシー
 - ウェブサイトホスティングのリライトルールだけでよいならバケットポリシーの設定は不要
+- 使用できる演算子は、[IAM JSON ポリシーエレメント: 条件演算子](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html) を参照
+#### CloudFront経由のアクセスのみを許可する
 - CloudFrontからアクセスさせたい場合はユーザーエージェントが妥当か
 ```
 {
@@ -54,6 +56,34 @@ aws s3api put-object --bucket mybucket --key index.html --website-redirect-locat
 }
 
 ```
+#### 特定のIPからのアクセスのみを許可する
+````
+{
+    "Version": "2012-10-17",
+    "Id": "Policy20190314-01",
+    "Statement": [
+        {
+            "Sid": "Stmt20190314-01",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": [
+                "arn:aws:s3:::test.hogehoge.jp/*",
+                "arn:aws:s3:::test.hogehoge.jp"
+            ],
+            "Condition": {
+                "IpAddress": {
+                    "aws:SourceIp": [
+                        "xx.xx.xx.xx/32",
+                        "dd.dd.dd.dd/32
+                    ]
+                }
+            }
+        }
+    ]
+}
+
+````
 
 ### 参考サイト
 - [S3のアクセスコントロールまとめ](https://qiita.com/ryo0301/items/791c0a666feeea0a704c)
