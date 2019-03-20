@@ -70,3 +70,4 @@ Successfully created/updated stack - test-lambdadeploy
 - [AWS SAM CLI Command Reference](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-command-reference.html)
   - [sam local generate-event](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-local-generate-event.html)
 - https://github.com/HDE/python-lambda-local
+- https://dev.classmethod.jp/server-side/serverless/aws-lambda-dev-test-deploy-ci/
