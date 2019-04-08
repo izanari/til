@@ -8,7 +8,7 @@
       const isIOS = ua.indexOf("iPhone");
       //console.log( isIOS );
       if ( isIOS > 0 ){
-        $('div.sa-slideshow-route').css('display','none');
+        $('div.sa-slideshow').css('display','none');
       }
     </script>
 ```
