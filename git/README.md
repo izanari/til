@@ -10,4 +10,12 @@ git remote add origin クローンURL
 git push origin master 
 ```
 
+- addする時に、`origin`ではなく、名前を変えることもできる。例えば、originからpullしたものを別のリポジトリに追加したい時は名前をつけることで簡単にpushできる。
+
+
 - `git push origin master` はブランチ指定、もし、すべてのブランチをpushしたい時は、`git push -u origin --all` とする。
+
+## 差分を見る
+```
+git log origin/master..master
+```
