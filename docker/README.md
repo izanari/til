@@ -32,3 +32,26 @@ RUN set -x && \
   - 参照URL: https://docs.docker.com/docker-for-mac/networking/
   - サンプル：`echo 'xdebug.remote_host=host.docker.internal'; `
 
+
+## その他
+### Docker を起動した時に、勝手にコンテナが起動されてしまうのをとめる
+- まずは調べる
+```
+docker inspect コンテナID | grep -A 3 RestartPolicy
+            "RestartPolicy": {
+                "Name": "always",
+                "MaximumRetryCount": 0
+            },
+```
+- Nameが`always`になっていると起動されてしまいます。そこで、このコマンドで変更をかけます。
+```
+ docker update --restart=no コンテナID
+ ```
+- 確認します
+```
+docker inspect dfb274ab1b7d | grep -A 3 -i "restartpolicy"
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+```
