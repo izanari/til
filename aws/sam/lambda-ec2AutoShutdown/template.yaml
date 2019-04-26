@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    ec2_auto_shutdown
+
+    SAM Template for ec2_auto_shutdown
+
+Globals:
+    Function:
+        Timeout: 3
+
+Resources:
+    EC2AutoStopFunction:
+        Type: AWS::Serverless::Function 
+        Properties:
+            FunctionName: EC2AutoStopFunction
+            CodeUri: src/
+            Handler: lambda_function.lambda_handler
+            Runtime: python3.7
+            #Environment: 
+            #    Variables:
+            #        PARAM1: VALUE
+            Events:
+                Timer:
+                    Type: Schedule
+                    Properties:
+                        # 時間はUTC
+                        Schedule: cron(15 12 * * ? *)
+            AutoPublishAlias: v1
+            Policies:
+                - {
+                    "Version": "2012-10-17",
+                    "Statement":[
+                            {
+                                "Sid": "",
+                                "Effect": "Allow", 
+                                "Action":[ 
+                                    "ec2:Describe*",
+                                    "ec2:StopInstances"
+                                ],
+                                "Resource": "*"
+                            }
+                        ]
+                    }
+            Tags:
+                runtype: prod
+Outputs:
+    EC2AutoStopFunction:
+      Description: "EC2AutoStopFunction ARN"
+      Value: !GetAtt EC2AutoStopFunction.Arn
