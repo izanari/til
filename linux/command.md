@@ -8,3 +8,9 @@ ps aux
 ```
 ps auxf
 ```
+
+## systemd
+### ユニットファイルを更新した時
+```
+systemctl daemon-reload
+```
