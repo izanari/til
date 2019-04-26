@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  IAMRoleName:
+    Type: String 
+
+Resources:
+  EC2IAMRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+      AssumeRolePolicyDocument: {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Sid": "",
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "ec2.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }
+      Path: "/ec2/"
+      MaxSessionDuration: 3600
+      RoleName: !Ref IAMRoleName
+
+  EC2IAMProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Path: "/ec2/"
+      Roles:
+        - !Ref EC2IAMRole
+      InstanceProfileName: !Sub Instance-${IAMRoleName}

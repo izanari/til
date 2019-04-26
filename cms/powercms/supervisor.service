@@ -1,0 +1,14 @@
+[Unit]
+Description = Starman Service
+After=network.service
+
+[Service]
+ExecStart = /usr/bin/supervisord -n -c /etc/supervisor/supervisor.conf
+ExecStop = /usr/bin/supervisorctl shutdown
+ExecReload = /usr/bin/supervisorctl reload
+KillMode = process
+Restart = on-failure
+RestartSec = 50s
+
+[Install]
+WantedBy = multi-user.target
