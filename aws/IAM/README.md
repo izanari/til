@@ -46,5 +46,8 @@ aws iam get-policy-version --policy-arn arn:aws:iam::accountid:policy/policyname
 aws iam get-role-policy --role-name rolename --policy-name policyname 
 ```
 
+## AssumeRole
+- https://christina04.hatenablog.com/entry/assume-role
+- 
 #### 参考URL
 - [【AWS】aws-cliでIAMの管理ポリシー・インラインポリシーを操作する](https://dev.classmethod.jp/cloud/aws/aws-cli-operate-iam-policy/)

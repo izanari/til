@@ -10,6 +10,11 @@
 yum update -y
 systemctl enable amazon-ssm-agent
 timedatectl set-timezone Asia/Tokyo
+
+yum install httpd.x86_64 
+systemctl enable httpd
+systemctl start httpd
+
 ```
 - そのほかに以下を忘れないよう設定する
   - IAMロールには、`AmazonEC2RoleforSSM`を付与したロールをつけておく

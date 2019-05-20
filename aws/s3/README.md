@@ -87,3 +87,7 @@ aws s3api put-object --bucket mybucket --key index.html --website-redirect-locat
 
 ### 参考サイト
 - [S3のアクセスコントロールまとめ](https://qiita.com/ryo0301/items/791c0a666feeea0a704c)
+
+## その他
+### s3syncをはやくする
+- [AWS CLI S3 Configurationを試したら想定以上にaws s3 syncが速くなった話](https://dev.classmethod.jp/cloud/aws/aws-s3-sync-with-aws-cli-s3-configuration/)

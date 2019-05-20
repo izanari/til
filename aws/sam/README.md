@@ -71,3 +71,16 @@ Successfully created/updated stack - test-lambdadeploy
   - [sam local generate-event](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-local-generate-event.html)
 - https://github.com/HDE/python-lambda-local
 - https://dev.classmethod.jp/server-side/serverless/aws-lambda-dev-test-deploy-ci/
+
+## トラブルシューティング
+### nodejs8.10をサポートしていないと言われたとき
+- samのバージョンが古い。v0.9からサポートされているため、upgradeしましょう
+  - 表示されるエラー
+```
+Build Failed
+Error: 'nodejs8.10' runtime is not supported
+```
+  - Macの場合
+```
+brew upgrade aws-sam-cli
+```
