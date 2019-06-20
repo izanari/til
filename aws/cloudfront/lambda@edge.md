@@ -83,3 +83,9 @@ exports.handler = async(event, context, callback) => {
 ## 参考すべきページ
 - [5分で読む！Lambda@Edge 設計のベストプラクティス](https://dev.classmethod.jp/cloud/aws/lambda-edge-design-best-practices/)
 - [Amazon CloudFrontとAWS Lambda@EdgeでSPAのBasic認証をやってみる](https://dev.classmethod.jp/cloud/aws/cloudfront-lambdaedge-basic-spa/)
+- [Lambda@Edge で URLパスを書き換える](https://dev.classmethod.jp/cloud/aws/lambdaedge-rewrite-url-path/)
+
+### キャッシュ時間について
+- [【新機能】Amazon CloudFrontに「Maximum TTL / Default TTL」が設定できるようになりました！](https://dev.classmethod.jp/cloud/aws/introduction-to-max-ttl-on-cloudfront/)
+- [Amazon CloudFrontのキャッシュ期間をコントロールする(2015年6月版](https://dev.classmethod.jp/cloud/cloudfront-cache-control/)
+- [コンテンツがエッジキャッシュに保持される期間の管理 (有効期限)](https://docs.aws.amazon.com/ja_jp/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)

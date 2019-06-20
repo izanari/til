@@ -8,3 +8,6 @@ FROM
  "default"."hogehoge" 
  where request like '/img/%'
 ```
+
+## 参考ドキュメント
+- [Amazon Athena で CloudFront のアクセスログを集計する](https://dev.classmethod.jp/cloud/aws/athena-cloudfront-log-activity/)

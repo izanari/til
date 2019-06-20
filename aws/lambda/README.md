@@ -1,7 +1,7 @@
 # Lambda
 ## 参照URL
 - [AWS Lambda 関数を使用する際のベストプラクティス](https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/best-practices.html)
-- 
+- [今から始めるサーバーレス](https://aws.amazon.com/jp/serverless/patterns/start-serverless/)
 
 ## CloudWatchのエラーカウントをあげる
 - ただしこれはベストプラクティスに反します

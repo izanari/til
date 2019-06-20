@@ -34,6 +34,9 @@ aws ssm create-association --targets Key=tag:Name,Values=fugafuga --name AWS-Upd
     </formats>
 </seelog>
 ```
+## SSMパラメーターの値をLambdaが取得する時にキャッシュさせる
+- https://github.com/alexcasalboni/ssm-cache-python
+
 ### 参考ドキュメント
 - http://rikuga.me/2017/12/15/ssm-agent-logrotate/
 

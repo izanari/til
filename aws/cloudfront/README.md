@@ -7,4 +7,10 @@
 ### S3オリジンの場合
 - https://docs.aws.amazon.com/ja_jp/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorS3Origin.html
 
-- ちょっっと翻訳が怪しいな
+## キャッシュ
+### 時間のコントロール
+- クライアント（PC）側のキャッシュ時間を短くし、CloudFront側のキャッシュ時間を長め（オリジンに負担をかけない）にしたい場合
+  - `Cache-Control: public; max-age:300`とし、CloudFrontの最小TTLを`86400`というようにする
+  
+## 参考ドキュメント
+- [CloudFrontのデフォルトルートオブジェクトとS3の静的ウェブサイトホスティングのインデックスドキュメントの動作の違い](https://dev.classmethod.jp/cloud/aws/cloudfront_s3_difference/)
