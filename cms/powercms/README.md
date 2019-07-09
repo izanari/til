@@ -125,7 +125,8 @@ PIDFilePath /var/www/powercms4/mt/powercms4.pid
 ```
 sudo mkdir /etc/supervisor
 sudo vim /etc/supervisor/supervisor.service
-sudo systemctl link /etc/supervisor/supervisor.service
+sudo cp /etc/supervisor/supervisor.service /etc/systemd/system
+sudo systemctl enable supervisor.service
 sudo mkdir /var/log/supervisor
 sudo mkdir /var/log/starman
 sudo chown apache /var/log/starman
