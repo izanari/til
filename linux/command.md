@@ -36,3 +36,11 @@ systemctl daemon-reload
 - パッケージをダウングレードする
   - `yum --showduplicate list packagename` で表示されれば可能です
   - `yum downgrade packagename`
+
+## find
+- 指定した日付（時間）のファイルを削除する
+  - `mmin`：分
+  - `mtime`：日
+```
+find /var/www/html -name "mt-preview-*" -mmin +30 -exec rm -f {} \;
+```
