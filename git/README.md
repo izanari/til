@@ -1,4 +1,5 @@
 # git
+
 ## ローカルディレクトリをgit pushする
 1. git リポジトリを作成しておく
 1. PC上で以下のコマンドを実行する
@@ -19,3 +20,19 @@ git push origin master
 ```
 git log origin/master..master
 ```
+
+## リモートリポジトリを追加する
+- リモートリポジトリを作成します。この時、Clone-URLを控えておきます
+- `remote add`でリポジトリを追加します
+- `push`でローカルのmasterブランチをリモートリポジトリに反映しています
+```
+git remote add github Clone-URL 
+git push -u github master 
+```
+
+## コマンド
+### 設定を確認する
+```
+git config --system --list
+```
+`--system`部は、`--global`、`--local`にすることでそれぞれの設定を確認することができる
