@@ -48,3 +48,15 @@
     ExpiresDefault "access plus 60 minutes"
   </LocationMatch>
 ```
+
+### コンテンツを圧縮して配信する
+#### Apache2.2の場合
+```
+        <IfModule mod_deflate.c>
+                #SetOutputFilter DEFLATE
+                AddOutputFilterByType DEFLATE text/html
+                AddOutputFilterByType DEFLATE text/css
+                AddOutputFilterByType DEFLATE text/javascript
+        </IfModule>
+```
+よく`SetOutputFilter DEFLATE`を記述しているサイトがあるが、これを記述するとMIMEタイプに関係なくすべてが圧縮されてしまいます。html/css/jsだけを圧縮したい場合は上記のように記述しましょう
