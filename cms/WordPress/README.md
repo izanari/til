@@ -24,8 +24,8 @@ insert into wbkofp_users(user_login, user_nicename, user_pass, user_email, user_
 values('hoge','hoge',MD5('hogehoge'),'yourmailaddress','2019-07-18 10:00:00');
 
 テーブルの接頭辞が設定されている場合は、wp_を設定値に置き換えてください
-insert into wbkofp_usermeta(user_id, meta_key, meta_value) values(2, 'wp_capabilities', 'a:1:{s:13:”administrator”;s:1:”1″;}');
-insert into wbkofp_usermeta(user_id, meta_key, meta_value) values(2, 'wp_user_level', '10');
+insert into wp_usermeta(user_id, meta_key, meta_value) values(2, 'wp_capabilities', 'a:1:{s:13:”administrator”;s:1:”1″;}');
+insert into wp_usermeta(user_id, meta_key, meta_value) values(2, 'wp_user_level', '10');
 
 ```
 
