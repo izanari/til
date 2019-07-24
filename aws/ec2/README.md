@@ -11,7 +11,7 @@ yum update -y
 systemctl enable amazon-ssm-agent
 timedatectl set-timezone Asia/Tokyo
 
-yum install httpd.x86_64 
+yum -y install httpd.x86_64 
 systemctl enable httpd
 systemctl start httpd
 
