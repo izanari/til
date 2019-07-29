@@ -29,7 +29,11 @@ git log origin/master..master
 git remote add github Clone-URL 
 git push -u github master 
 ```
-
+## git push -f はやめておこう
+- [git push -f をやめて --force-with-lease を使おう](https://qiita.com/wMETAw/items/5f47dcc7cf57af8e449f)
+  - ```
+    git push --force-with-lease origin master
+    ```
 ## コマンド
 ### 設定を確認する
 ```
