@@ -163,7 +163,7 @@ SentMessageSize | キューに追加されたメッセージのサイズ（バ�
       ]
   }
   ```
-削除
+- 削除
   ```
   aws sqs delete-message \
   --queue-url https://sqs.ap-northeast-1.amazonaws.com/accountid/test \
@@ -171,7 +171,7 @@ SentMessageSize | キューに追加されたメッセージのサイズ（バ�
 
   レスポンスは無い(削除ができたことをどうやって確認するのか？？)
   ```
-キューの属性を取得する
+- キューの属性を取得する
   ```
     aws sqs get-queue-attributes --profile fork_y.izawa --queue-url https://sqs.ap-northeast-1.amazonaws.com/accountid/test --attribute-names All --output json
   {
