@@ -4,6 +4,24 @@
 - [AWS CLI の使用](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-chap-using.html)
 - [JMESPath チュートリアル](https://dev.classmethod.jp/cloud/aws/jmespath-tutorial/)
 
+## 設定
+### 参照サイト
+- https://dev.classmethod.jp/cloud/aws/how-to-configure-aws-cli/
+
+## コマンド
+- 設定されているプロファイルを一覧表示する
+```
+% aws configure list
+```
+- デフォルトのプロファイルを変更する
+```
+% export AWS_DEFAULT_PROFILE=hogehoge
+```
+- 現在取得している認証情報を表示する
+```
+aws sts get-caller-identity
+```
+
 ## 自分で作成したAMIの一覧を表示する
 ```
 #!/bin/sh
