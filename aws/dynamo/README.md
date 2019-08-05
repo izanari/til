@@ -8,19 +8,25 @@
   - オンデマンド
     - Auto Scalingは選択できない
 
-
 ## 参考ドキュメント
 - [コンセプトから学ぶAmazon DynamoDB – シリーズ –](https://dev.classmethod.jp/series/conceptual-learning-about-dynamodb/)
+- [DynamoDB – 特集カテゴリー ](https://dev.classmethod.jp/referencecat/aws-dynamodb/)
 
 
 ## 料金
-### プロビジョンドスループット
+### プロビジョンドされたキャパシティの場合
 - Read/Writeそれぞれ25キャパシティユニットまでは無料
 - 書き込み
   - $0.00742 10ユニットの書き込み容量あたり/1時間
 - 読み込み
   - $0.00742 50ユニットの読み込み容量あたり/1時間
-
+#### リザーブドキャパシティ
+- リザーブドインスタンスと同じで、かなり安価になる
+### オンデマンドキャパシティの場合
+- 書き込みリクエスト
+  - 100万単位あたり：1.4269USD
+- 読み込みリクエスト
+  - 100万単位あたり：0.285USD
 
 ## キャパシティの決め方
 - プロビジョンドとオンデマンドがある
@@ -77,6 +83,7 @@
     - Readリクエストを受け取る前までのWriteが全て反映されたレスポンスを保証する
     - Capacity Unitを2倍消費する
     - aws dynamodb get-item `--consistent-read`
+  - グローバルセカンダリインデックス (GSI)で「強力な整合性のある読み込み」が利用できない
 
 
 ## テーブルについて
@@ -176,11 +183,16 @@
   - Overloadするattributeの値はitemのcontextが分かる値にする
 - 作成してもすぐに完了にならない
 - テーブル作成後でも設定することができる
+
   
 #### 注意点
 - LSI/GSIは便利だがスループットやストレージ容量が追加で必要になる
 - インデックスが増えれば増えるほど書き込みコストが上がる
 - セカンダリインデックスに強く依存するテーブル設計になるようであれば、一度RDBで要件を満たせないかを確認してすることがベター
+##### 参考ドキュメント
+- [GSI OVERLOADING について 自分なりにまとめてみた](https://dev.classmethod.jp/cloud/aws/basic-of-gsi-overloading/)
+
+
 ## DynamoDBの機能
 ### TTL
 - テーブルの項目の有効期限が切れ、データベースから自動的に削除できるタイミングを定義出来る
@@ -207,11 +219,14 @@
   - AWS Data Pipelineを使ったデータバックアップ
     - 別リージョン、同一リージョンのDynamoDBのテーブルに対してコピー、選択したAttributeのみコピー、選択したAttributeのみのIncrementakコピーのジョブを実行することが可能
   - Amazon MapRededuceを使ったコピー
+
+
 # DAX
 - リージョン内でマルチAZ構成かつキャッシュ情報のレプリケーション、障害時のフェイルオーバーなどをフルマネージドで実現してくれている
 - 最大10ノードまでスケールアウトする
 - VPCに配置する
 - Java SDKのみの対応となっているようです
+
 
 # DynamoDB Streams
 - 過去24時間以内にそのテーブルのデータに対して行われた変更のストリームすべてにアクセス可能。24時間経過したストリームデータは削除される。
@@ -223,9 +238,123 @@
   - クロスリージョンレプリケーション
   - ユーザーの集計、分析、解析のための非同期集計
   - ホットデータとコールドデータでテーブルを分ける
+## ストリームの表示タイプ
+|表示タイプ|概要|
+|---|---|
+|キーのみ|変更された項目のキー属性のみ|
+|新しいイメージ|変更後に表示される項目全体|
+|古いイメージ|変更前に表示されていた項目全体|
+|新旧イメージ|項目の新しいイメージと古いイメージの両方|
+## 設定について
+- ストリームを有効にするとARNが生成される
+- テーブルには1つのストリームしか設定はできない
 ## DynamoDB Streams API
 - ListStrreams
 - DescribeStream
 - GetShadIterator
 - GetRecords
-# DynamoDB Triggers
+## DynamoDB Triggers
+## ユースケース
+- DynamoDBへの書き込みに応じて値をチェックしつつ別テーブルの更新やプッシュ通知を実行
+- DynamoDBの更新状況の監査ログをS3へ保存
+- ゲームデータなどのランキング集計を非同期に実施
+## 参考ドキュメント
+- [DynamoDB ストリーム と AWS Lambda のトリガー](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Streams.Lambda.html)
+- [Amazon DynamoDB Triggersを使ってDynamoDB StreamsとAWS Lambdaを連携する](https://dev.classmethod.jp/cloud/aws/dynamodb-streams-cooperates-with-lambda/)
+
+### Lambdaで取得できるevent
+- 2つのLambdaを設定しても動作はするようだ
+#### 新休イメージを設定した場合
+- `BarkTable`は、プライマリーキーに、`Username+Timestamp`を設定してあります
+- 項目の追加をした場合
+  - `eventName`が`INSERT`になっている
+```
+{'Records': [
+  { 'eventID': 'eventid', 
+    'eventName': 'INSERT', 
+    'eventVersion': '1.1', 
+    'eventSource': 'aws:dynamodb', 
+    'awsRegion': 'ap-northeast-1', 
+    'dynamodb': {'ApproximateCreationDateTime': 1564988394.0, 
+    'Keys': {'Username': {'S': 'hogehoge'}, 'Timestamp': {'S': '2019-08-05 15:58'}}, 'NewImage': {'Email': {'S': 'hogehoge@gmail.com'}, 'Username': {'S': 'hogehoge'}, 'Sex': {'S': 'mail'}, 'Timestamp': {'S': '2019-08-05 15:58'}}, 
+    'SequenceNumber': '12600000000000084089244', 
+    'SizeBytes': 111, 
+    'StreamViewType': 'NEW_AND_OLD_IMAGES'
+  }, 
+  'eventSourceARN': 'arn:aws:dynamodb:ap-northeast-1:accountid:table/BarkTable/stream/2019-08-05T06:38:17.212'}]
+}
+```
+- 項目の更新
+  - `eventName`が`MODIFY`になっている
+```
+{'Records': [
+  { 'eventID': 'eventid', 
+    'eventName': 'MODIFY', 
+    'eventVersion': '1.1', 
+    'eventSource': 'aws:dynamodb', 
+    'awsRegion': 'ap-northeast-1', 
+    'dynamodb': {'ApproximateCreationDateTime': 1564988734.0, 'Keys': {'Username': {'S': 'hogehoge'}, 'Timestamp': {'S': '2019-08-05 15:58'}}, 'NewImage': {'Email': {'S': 'hogehoge@gmail.com'}, 'Username': {'S': 'hogehoge'}, 'Sex': {'S': 'mail'}, 'Timestamp': {'S': '2019-08-05 15:58'}}, 'OldImage': {'Email': {'S': 'hogehoge@gmail.com'}, 'Username': {'S': 'hogehoge'}, 'Sex': {'S': 'mail'}, 'Timestamp': {'S': '2019-08-05 15:58'}}, 
+    'SequenceNumber': '12700000000000084250113', 
+    'SizeBytes': 182, 
+    'StreamViewType': 'NEW_AND_OLD_IMAGES'}, 
+    'eventSourceARN': 'arn:aws:dynamodb:ap-northeast-1:accountid:table/BarkTable/stream/2019-08-05T06:38:17.212'}]
+}
+```
+- 項目の削除
+  - `eventName`が`REMOVE`になっている
+```
+{
+  'Records': [
+    { 'eventID': 'eventid', 
+      'eventName': 'REMOVE', 
+      'eventVersion': '1.1', 
+      'eventSource': 'aws:dynamodb', 
+      'awsRegion': 'ap-northeast-1', 
+      'dynamodb': {'ApproximateCreationDateTime': 1564989017.0, 'Keys': {'Username': {'S': 'hogehoge'}, 'Timestamp': {'S': '2019-08-05 15:58'}}, 'OldImage': {'Email': {'S': 'hogehoge@gmail.com'}, 'Username': {'S': 'hogehoge'}, 'Sex': {'S': 'mail'}, 'Timestamp': {'S': '2019-08-05 15:58'}}, 
+      'SequenceNumber': '12800000000000084379557', 
+      'SizeBytes': 112, 
+      'StreamViewType': 'NEW_AND_OLD_IMAGES'}, 
+      'eventSourceARN': 'arn:aws:dynamodb:ap-northeast-1:accountid:table/BarkTable/stream/2019-08-05T06:38:17.212'}]
+}
+```
+### Lambda側の設定
+- テーブル名
+- バッチサイズ
+  - 一度に読み取るレコードの最大数。最大1000。
+  - 2以上設定した場合は、Lambda内でループさせる必要がある
+- 開始位置
+  - 最新：最新のものから順番に読み取る
+    - 最新のデータを使用する設計なら
+  - 水平トリム：読み取りされていないものを古い順から読み取る
+    - 時間順に処理したい場合
+
+### 必要なrole
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "lambda:InvokeFunction"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:DescribeStream",
+        "dynamodb:ListStreams",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
