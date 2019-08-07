@@ -1,4 +1,6 @@
 # AWS Codeシリーズ
+## 参考情報
+- [AKIBA.aws で「AWS のサービスを活用して CI/CD」というタイトルで話しました #akibaaws](https://dev.classmethod.jp/cloud/aws/aws-service-cicd-in-akibaaws/)
 ## EC2+Code Deploy+ELBは使っていない構成の場合
 ### 構成例
 - [CodeCommitから非ELB環境のEC2へdeployする](./ec2.md)
