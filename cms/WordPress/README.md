@@ -34,3 +34,40 @@ insert into wp_usermeta(user_id, meta_key, meta_value) values(2, 'wp_user_level'
 ```
 define('WP_SITEURL','http://localhost/');
 ```
+
+### tinyMCEのスタイルを追加したいとき
+```
+function initialize_tinymce_styles($init_array)
+{
+    $style_formats = array('title'=>'カスタム', 'items'=>array(
+                        array(
+                            'title' => 'リンク（外部サイト）',
+                            'inline' => 'a',
+                            'classes' => 'link external',
+                            'attributes' => array(
+                                'href' => 'https://'
+                            )
+                        ),
+                        array(
+                            'title' => 'ブロック(a)',
+                            'block' => 'div',
+                            'classes' => 'block type-a'
+                        ),
+                        array(
+                            'title' => 'カスタムデータ属性',
+                            'inline' => 'p',
+                            'attributes' => array(
+                                'data-color'=>'red'
+                            )
+                        )
+                    )
+        );
+    $init_array['style_formats']=json_encode($style_formats);
+    $init_array['style_formats_merge']=true;
+    
+    return $init_array;
+}
+
+add_filter('tiny_mce_before_init', 'initialize_tinymce_styles', 10);
+```
+- オリジナルのスタイルは、```wp-includes/js/tinymce/themes/inlite/theme.js```で定義されている
