@@ -1,7 +1,7 @@
 # git
 
 ## ローカルディレクトリをgit pushする
-1. git リポジトリを作成しておく
+1. リモートリポジトリを作成しておく
 1. PC上で以下のコマンドを実行する
 ```
 git init
@@ -34,9 +34,45 @@ git push -u github master
   - ```
     git push --force-with-lease origin master
     ```
-## コマンド
-### 設定を確認する
+
+## git push を取り消す（歴史を書き換える）
+- ローカルの変更を取り消す
+    ```
+    git reset --hard HEAD^
+    ```
+- 強制的にpushする
+    ```
+    git push -f origin master
+    ```
+- 参考URL
+  - http://www-creators.com/archives/2020
+
+## リモートのブランチを指定してpushする
+- ローカル:master --> remote:remotebranch へpushしたい場合
+    ```
+    git push remote master:remotebranch
+    ```
+
+
+## 設定を確認する
 ```
 git config --system --list
 ```
 `--system`部は、`--global`、`--local`にすることでそれぞれの設定を確認することができる
+
+## よく使うコマンド
+### ブランチ編
+- リモートブランチを表示する
+    ```
+    git remote
+    git remote -v
+    ```
+- ローカルとリモートのブランチを一覧表示する
+    ```
+    git branch -a
+    ```
+- リモートリポジトリでは削除したのにブランチ表示されるとき
+    ```
+    git remote show origin
+    git remote prune origin
+    ```
