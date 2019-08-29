@@ -46,8 +46,8 @@ chmod +x cpanm
 /usr/local/bin/cpanm CGI::Parse::PSGI
 /usr/local/bin/cpanm CGI::PSGI
 /usr/local/bin/cpanm Task::Plack
+/usr/local/bin/cpanm Starman
 
 pip install supervisor;
 
-systemctl enable httpd;
-systemctl enable mariadb;
+
