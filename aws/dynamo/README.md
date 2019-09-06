@@ -254,11 +254,11 @@
 - GetShadIterator
 - GetRecords
 ## DynamoDB Triggers
-## ユースケース
+### ユースケース
 - DynamoDBへの書き込みに応じて値をチェックしつつ別テーブルの更新やプッシュ通知を実行
 - DynamoDBの更新状況の監査ログをS3へ保存
 - ゲームデータなどのランキング集計を非同期に実施
-## 参考ドキュメント
+### 参考ドキュメント
 - [DynamoDB ストリーム と AWS Lambda のトリガー](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Streams.Lambda.html)
 - [Amazon DynamoDB Triggersを使ってDynamoDB StreamsとAWS Lambdaを連携する](https://dev.classmethod.jp/cloud/aws/dynamodb-streams-cooperates-with-lambda/)
 
