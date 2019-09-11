@@ -1,4 +1,58 @@
 # S3 
+## 暗号化によるデータ保護
+- サーバサイド暗号化
+  - メタデータは暗号されない。オブジェクトデータのみが暗号化される
+  - 暗号化種別
+    - SSE-S3
+      - AWSが管理する鍵を利用して暗号化
+        - コンソール画面上では、AWSマネージ型キーと表示されている
+      - AES-256を利用して暗号される
+      ```
+      aws s3 cp ./test.txt s3://yourbucket/ --sse
+     
+      (確認方法)
+      aws s3api get-object --bucket yourbucket --key test.txt download-object
+      {
+        "AcceptRanges": "bytes", 
+        "ContentType": "text/plain", 
+        "LastModified": "Wed, 11 Sep 2019 06:04:13 GMT", 
+        "ContentLength": 19, 
+        "ETag": "\"xxxxxx\"", 
+        "ServerSideEncryption": "AES256", 
+        "Metadata": {}
+      }
+      ```
+
+    - SSE-KMS
+      - Key Managemtn Service(KMS)の鍵を利用して暗号化
+        - カスタマー管理型のキーと表示されている
+      - KMSで作成したキーを指定してAWSコマンドを実行します
+      ```
+      aws s3 cp test2.txt s3://yourbucket --sse-kms-key-id 111111111-2222-333-b66e-9c700cd608a3 --sse aws:kms
+      （get-objectで確認すると）
+        {
+        "AcceptRanges": "bytes", 
+        "ContentType": "text/plain", 
+        "LastModified": "Wed, 11 Sep 2019 06:44:43 GMT", 
+        "ContentLength": 27, 
+        "ETag": "\"e1198a08d47ee2ecb0182aacea5753cc\"", 
+        "ServerSideEncryption": "aws:kms", 
+        "SSEKMSKeyId": "arn:aws:kms:ap-northeast-1:{accountid}:key/{keyのid}", 
+        "Metadata": {}
+        }
+      ```
+
+    - SSE-C
+      - ユーザーが提供した鍵を利用して暗号化
+        - カスタムキーストア（CloudHSM)が必要
+- クライアントサイド暗号化
+    - 暗号化プロセスはユーザー側で管理する
+    - クライアント側で暗号化したデータをS3へアップロードする
+    - 暗号化種別
+      - AWS KMSで管理されたカスタマーキーを利用して暗号化
+      - クライアントが管理するカスタマーキーを利用して暗号化
+### 参考URL
+- [サーバー側の暗号化を使用したデータの保護](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/serv-side-encryption.html)
 ## リダイレクトするには
 ### オブジェクトにリダイレクトルールを設定する
 ```

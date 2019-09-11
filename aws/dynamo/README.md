@@ -131,7 +131,11 @@
     - Put:Attributeを指定した値で更新
     - Add:AttributeがNumber型なら足し算、引き算、Set型ならそのセットに対して値を追加する
     - Delete:当該Attributeを削除する
-
+#### プロジェクション式
+- 一部の属性のみを取得するにはプロジェクション式を利用する
+```
+aws dynamodb get-item --table-name HogeTable --key fugafuga --projection-expression "Zip,Address1,Address2"
+```
 
 ## テーブル設計
 - Partitaion Keyは必須
