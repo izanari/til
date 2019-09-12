@@ -1,4 +1,6 @@
 # Athena
+## S3 のアクセスログを集計する
+- [Athena を使用して Amazon S3 サーバーのアクセスログを分析するにはどうすればよいですか ?](https://aws.amazon.com/jp/premiumsupport/knowledge-center/analyze-logs-athena/)
 ## Apache logs
 - 集計query
   - カウントと転送量を集計する
