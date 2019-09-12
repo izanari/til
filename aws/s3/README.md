@@ -145,6 +145,14 @@ aws s3api put-object --bucket mybucket --key index.html --website-redirect-locat
 ## メタヘッダーを追加する
 - s3にputされたらlambdaをキックしてヘッダーを追加するようにする
   - [Lambda Function](./01_lambda_handler.py)
+
+## マルチパートアップロード
+- 通常、オブジェクトサイズが 100 MB 以上の場合は、単一のオペレーションでオブジェクトをアップロードする代わりに、マルチパートアップロードを使用することを考慮してください。
+- マルチパートアップロードは 5 MB～5 TB のオブジェクトで使用できます。
+- マルチパートアップロード API を使用すると、最大 5 TB の大容量オブジェクトをアップロードできます。
+- 1 回の PUT オペレーションでアップロードできるオブジェクトの最大サイズは 5 GB です。
+
+
 ## その他
 ### s3syncをはやくする
 - [AWS CLI S3 Configurationを試したら想定以上にaws s3 syncが速くなった話](https://dev.classmethod.jp/cloud/aws/aws-s3-sync-with-aws-cli-s3-configuration/)

@@ -1,5 +1,12 @@
 # SAM
 ## 使い方
+### プロジェクトディレクトリを作成する
+```
+sam init -n sam-test -r pyrhon3.7 
+```
+- `sam-test`ディレクトリが作成され、デフォルトのファイルが作成される
+
+
 ### Lambda Functionを用意する
 - requirements.txtは空でもいいので作成する
 ### evnet.jsonを用意する
@@ -53,15 +60,16 @@ Successfully created/updated stack - test-lambdadeploy
 - deployした際に、`.aws-sam`ディレクトリが自動生成されます
 - `output.yml`も、`sam package`した時に自動生成されます
 
+
 ## はまるポイント
 - deploy時のパラメーターがbuildと違う
 - パラメータを''で括る時にも注意する
 ```
- --parameters-overrides 'Logging=DEBUG param2=value2'
+ --parameters-overrides 'param1=value1 param2=value2'
  ```
- - このような指定方法をすると、パラメータ名が`Logging`、値が、`DEBUG param2=value2`となってしまいます。
+ - このような指定方法をすると、パラメータ名が`param1`、値が、`value1 param2=value2`となってしまいます。
 ```
- --parameters-overrides Logging='DEBUG' param2='value2'
+ --parameters-overrides param1='value1' param2='value2'
  ```
 - valueに改行がはいることがある時はこのようにくくりましょう
 ## 参考URL
@@ -83,4 +91,6 @@ Error: 'nodejs8.10' runtime is not supported
   - Macの場合
 ```
 brew upgrade aws-sam-cli
+or
+pip install --upgrade aws-sam-cli
 ```
