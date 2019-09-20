@@ -59,6 +59,8 @@
 - Encrypt
 - Decrypt
 - GenerateDataKey
+  ```
+  aws kms generate-data-key --key-id 2d89b038-6329-4ac8-b66e-xxxxxxxxx --profile fork_y.izawa --key-spec AES_256
 
 ## 暗号鍵管理機能
 - 鍵の生成
