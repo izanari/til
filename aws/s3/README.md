@@ -1,4 +1,15 @@
 # S3 
+## Data Consistency モデル
+- データの更新・削除には結果整合性が採用されている
+  - 新規登録(New PUTs)
+    - Consistency Read
+      - 登録後、即時データが参照できる
+  - 更新(Overwrite PUTs)
+    - Eventual Consistency Read(結果整合性)
+      - 更新直後は、以前のデータが参照される可能性がある
+  - 削除(DELETE)
+    - Eventual Consistency Read(結果整合性)
+      - 削除直後は、削除前のデータが参照される可能性がある
 ## 暗号化によるデータ保護
 - サーバサイド暗号化
   - メタデータは暗号されない。オブジェクトデータのみが暗号化される
