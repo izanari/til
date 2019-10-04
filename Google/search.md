@@ -8,3 +8,5 @@
 - [テストツール](https://search.google.com/structured-data/testing-tool/u/0/)
 - [リッチリザルト テスト](https://search.google.com/test/rich-results)
 
+## メタタグ
+- [robots メタタグ](https://developers.google.com/search/reference/robots_meta_tag)

@@ -1,4 +1,36 @@
 # SAM
+## 文法
+### AWS::Serverless::Function
+- CodeUri
+  - s3にアップロードしたコードの指定方法
+  ```
+  Resources:
+    HelloWorldFunction:
+      Type: AWS::Serverless::Function
+      Properties:
+        CodeUri: s3://hogehoge.zip
+  ```
+  - Inline Codeの書き方
+    - テンプレート内に直接コードを記述することができる
+  ```
+  Resources:
+    HelloWorldFunction:
+      AWS::Serverless::Function
+      Properties:
+        InlineCode: |
+          exports.handler = async(event, context, callback) => {
+            return event
+          }
+        Handler: index.handler
+  ```
+- DeploymentPreference
+  - Deployの仕方を指定することができる
+    - AllAtOnce
+      - すべてのLambda関数の実行を最新バージョンで行う
+    - Canary{x}Percent{y}Minutes
+      - Lambda関数の実行のうち{x}%は最新バージョンを実行し、{y}分後にすべてが最新バージョンで実行される
+    - Linear{x}Percent{y}Minutes
+      - {y}分毎に{x}パーセントずつ新しいLambda関数へトラフィックを流し、100％になるまでこれを継続する
 ## 使い方
 ### プロジェクトディレクトリを作成する
 ```
@@ -94,3 +126,6 @@ brew upgrade aws-sam-cli
 or
 pip install --upgrade aws-sam-cli
 ```
+
+## 参考URL
+- [AWS SAMを通してCodeDeployを利用したLambda関数のデプロイを理解する – ClassmethodサーバーレスAdvent Calendar 2017 #serverless #adventcalendar #reinvent](https://dev.classmethod.jp/server-side/serverless/understanding-lambda-deploy-with-codedeploy-using-aws-sam/)

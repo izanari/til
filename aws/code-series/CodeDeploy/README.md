@@ -4,6 +4,14 @@
   - `/opt/codedeploy-agent/deployment-root/deployment-logs/codedeploy-agent-deployments.log`に記録されている
     - stdoutがそのまま記録されるため、シェルの中で、`set -x`しておいたほうがよい
 
+## デプロイ設定
+### EC2
+- CodeDeployDefault.AllAtOnce
+  - 一度にすべてのインスタンスにデプロイする。最低１つのデプロイが成功した場合、全体のデプロイが成功したものとする。
+- CodeDeployDefault.OneAtTime
+  - インスタンス1つずつにデプロイする。全てのインスタンスにデプロイが成功した場合、全体のデプロイが成功したものとする。デプロイが失敗した時点で失敗と扱われるが、既にデプロイが成功したインスタンスはそのまま。
+-  CodeDeployDefault.HalfAtTime
+   -  一度に総インスタンス数の半分までデプロイする。総インスタンス数の半分までデプロイが成功した場合、全体のデプロイが成功したものとする。全体のデプロイが失敗した場合でも、既にデプロイが成功したインスタンスはそのまま。
 ## AppSpecのhooksセクション
 ### ECS
 - Lambda関数を実行できる
