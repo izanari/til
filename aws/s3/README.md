@@ -163,7 +163,8 @@ aws s3api put-object --bucket mybucket --key index.html --website-redirect-locat
 - マルチパートアップロード API を使用すると、最大 5 TB の大容量オブジェクトをアップロードできます。
 - 1 回の PUT オペレーションでアップロードできるオブジェクトの最大サイズは 5 GB です。
 
-
+## トラブルシューティング
+- [Amazon S3 から HTTP 307 Temporary Redirect レスポンスが返るのはなぜですか?](https://aws.amazon.com/jp/premiumsupport/knowledge-center/s3-http-307-response/)
 ## その他
 ### s3syncをはやくする
 - [AWS CLI S3 Configurationを試したら想定以上にaws s3 syncが速くなった話](https://dev.classmethod.jp/cloud/aws/aws-s3-sync-with-aws-cli-s3-configuration/)

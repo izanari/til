@@ -9,68 +9,135 @@
     export AWS_SECRET_ACCESS_KEY=fugafuga
     ```
 ## 起動する
-- クラスタの名前を指定する
-  
-```
-ecs-cli configure --region ap-northeast-1 --cluster test-ecs-clister
-INFO[0000] Saved ECS CLI cluster configuration default. 
-```
+- クラスタの名前を指定する  
+    ```
+    ecs-cli configure --region ap-northeast-1 --cluster test-ecs-cluster
+    ```
+    - デフォルトのcluster名を設定しておくと、ecs-cliで`--cluster`をつける必要がなくなります
 
 - ECSクラスタを起動します
+  - `ecs-cli up`に下記のようなパラメータを付与します。`size`が起動したいEC2インスタンスです
+    ```
+    #/bin/sh 
 
-```
-ecs-cli up --capability-iam --size 2 --instance-type t3.nano --keypair hogehoge
-INFO[0000] Using recommended Amazon Linux 2 AMI with ECS Agent 1.32.0 and Docker version 18.06.1-ce 
-INFO[0000] Created cluster                               cluster=test-ecs-clister region=ap-northeast-1
-INFO[0001] Waiting for your cluster resources to be created... 
-INFO[0001] Cloudformation stack status                   stackStatus=CREATE_IN_PROGRESS
-```
-- パラメーターを何も指定しないと、VPCやサブネットを自動で作成してくれます。何を作成されたか確認する場合は、CloudFormationのリソースを見るとわかります
+    ecs-cli up \
+    --keypair ${KEYS} \
+    --capability-iam \
+    --cluster ${CLUSTER_NAME} \
+    --size 2 \
+    --instance-type ${INSTANCE_TYPE} \
+    --launch-type EC2 \
+    --region ap-northeast-1 \
+    --extra-user-data user-data.txt \
+    --force
+    ```
+  - VPCやサブネットをパラメータから指定をしない場合は、自動で作成してくれます。何が作成されたか確認する場合は、CloudFormationのリソースを見るとわかります。指定をしたい場合は、別途作成しておき、パラメーターで指定を行います。
+  - `extra-user-data`はEC2インスタンスのユーザーデータのこと。起動させるEC2インスタンスで何かやらせたい場合は、ここに記述すること
+    - 例えば、SSMのセッションマネージャーでEC2インスタンスを管理したい場合は、エージェントのインストールおよび起動させる。IAM roleも気に留めること。
 
+- コンテナを起動させます
+    - ecs-cliはDocker Composeに対応しています。以下のようなcomposeファイルを用意します。
+
+        ```
+        version: '2'
+
+        services:
+        apache:
+            image: httpd
+            ports:
+            - "80:80"
+            volumes:
+            - "/var/www/task1/html:/usr/local/apache2/htdocs"
+            logging:
+            driver: awslogs
+            options:
+                awslogs-group: ecs-test 
+                awslogs-region: ap-northeast-1 
+                awslogs-stream-prefix: apache
+        ```
+    - ecsパラメータファイルを用意します
+      - ファイル名は`ecs-params.yml`
+      - service_name（下の`apache` は実行するコンテナの名前と一致させます
+      - メモリの指定がうまくいってない
+        ```
+        version: 1
+        task_definition:
+        family: ecs-test-v1
+        ecs_network_mode: bridge
+        service:
+            apache:
+                essential: true
+                cpu_shares: 100
+                mem_limit: 256
+                healthcheck:
+                test: ["CMD","curl -f http://localhost:80"]
+                interval: 10s
+                timeout: 15s
+                retries: 5   
+        run_params:
+        network_configuration:
+            awsvpc_configuration:
+            subnets:
+                - subnet-hogehoge
+                - subnet-hogehoge
+        ```
+            - subnetsは各自の環境にあわせます
+    - まずはタスク定義を作成します
+        ```
+        #!/bin/sh
+
+        ecs-cli compose \
+        --verbose \
+        --file ${COMPOSE_FILE} \
+        --cluster ${CLUSTER_NAME} \
+        --project-name ${FAMILY_NAME} \
+        --ecs-params ${ECS_PARAMS_FILE} \
+        --region ap-northeast-1 \
+        create
+        ```
+
+    - 起動します
+        ```
+        #!/bin/sh
+
+        ecs-cli compose \
+        --file ${COMPOSE_FILE} \
+        --ecs-params ${ECS_PARAMS_FILE} \
+        --project-name ${FAMILY_NAME} \
+        start \
+        --create-log-groups \
+        --cluster ${CLUSTER_NAME} 
+        ```
+        - これだけでは、サービスとしては登録されていないため。別途登録する必要があります。
+- コンテナを停止させる
+    ```
+    ecs-cli compose down
+    ```
 ## 削除する
 - ECSクラスタを削除する
+    ```
+    ecs-cli down
+    Are you sure you want to delete your cluster? [y/N]
+    ```
+    - CloudFormationスタックが削除されるので、ecs-cliで作成したリソースがすべて削除されます
+
+## その他コマンド
+### コンテナインスタンスの数を変更したい
 ```
-ecs-cli down
-Are you sure you want to delete your cluster? [y/N]
-y
+ecs-cli scale --capability-iam --size 1
+INFO[0001] Waiting for your cluster resources to be updated... 
+INFO[0001] Cloudformation stack status                   stackStatus=UPDATE_IN_PROGRESS
+INFO[0061] Cloudformation stack status                   stackStatus=UPDATE_COMPLETE_CLEANUP_IN_PROGRESS
 ```
+- size の数字を変更することでインスタンス数を変更することができます
+- このコマンドでASGの希望するキャパシティを変更してくれます
+- EC2インスタンスは、`stop`ではなく、`terminated`になるので、必要なファイルがあれば、事前にバックアップしておきましょう
+  - というか、そのような運用をしてはいけないってことですかね
 
 
-
-## ヘルプ
-### `ecs-cli up`
-```
-NAME:
-   ecs-cli up - Creates the ECS cluster (if it does not already exist) and the AWS resources required to set up the cluster.
-
-USAGE:
-   ecs-cli up [command options] [arguments...]
-
-OPTIONS:
-   --capability-iam                  Acknowledges that this command may create IAM resources. Required if --instance-role is not specified. NOTE: Not applicable for launch type FARGATE or when creating an empty cluster.
-   --empty, -e                       [Optional] Specifies that an ECS cluster will be created with no resources.
-   --instance-role value             [Optional] Specifies a custom IAM Role for instances in your cluster. A new instance profile will be created and attached to this role. Required if --capability-iam is not specified. NOTE: Not applicable for launch type FARGATE.
-   --keypair value                   [Optional] Specifies the name of an existing Amazon EC2 key pair to enable SSH access to the EC2 instances in your cluster. Recommended for EC2 launch type. NOTE: Not applicable for launch type FARGATE.
-   --instance-type value             [Optional] Specifies the EC2 instance type for your container instances. If you specify the A1 instance family, the ECS optimized arm64 AMI will be used, otherwise the x86 AMI will be used. Defaults to t2.micro. NOTE: Not applicable for launch type FARGATE.
-   --spot-price value                [Optional] If filled and greater than 0, EC2 Spot instances will be requested.
-   --image-id value                  [Optional] Specify the AMI ID for your container instances. Defaults to amazon-ecs-optimized AMI. NOTE: Not applicable for launch type FARGATE.
-   --no-associate-public-ip-address  [Optional] Do not assign public IP addresses to new instances in this VPC. Unless this option is specified, new instances in this VPC receive an automatically assigned public IP address. NOTE: Not applicable for launch type FARGATE.
-   --size value                      [Optional] Specifies the number of instances to launch and register to the cluster. Defaults to 1. NOTE: Not applicable for launch type FARGATE.
-   --azs value                       [Optional] Specifies a comma-separated list of 2 VPC Availability Zones in which to create subnets (these zones must have the available status). This option is recommended if you do not specify a VPC ID with the --vpc option. WARNING: Leaving this option blank can result in failure to launch container instances if an unavailable zone is chosen at random.
-   --security-group value            [Optional] Specifies a comma-separated list of existing security groups to associate with your container instances. If you do not specify a security group here, then a new one is created.
-   --cidr value                      [Optional] Specifies a CIDR/IP range for the security group to use for container instances in your cluster. This parameter is ignored if an existing security group is specified with the --security-group option. Defaults to 0.0.0.0/0.
-   --port value                      [Optional] Specifies a port to open on the security group to use for container instances in your cluster. This parameter is ignored if an existing security group is specified with the --security-group option. Defaults to port 80.
-   --subnets value                   [Optional] Specifies a comma-separated list of existing VPC Subnet IDs in which to launch your container instances. This option is required if you specify a VPC with the --vpc option.
-   --vpc value                       [Optional] Specifies the ID of an existing VPC in which to launch your container instances. If you specify a VPC ID, you must specify a list of existing subnets in that VPC with the --subnets option. If you do not specify a VPC ID, a new VPC is created with two subnets.
-   --extra-user-data value           [Optional] Specifies additional User Data for your EC2 instances. Files can be shell scripts or cloud-init directives and are packaged into a MIME Multipart Archive along with ECS CLI provided User Data which directs instances to join your cluster.
-   --force, -f                       [Optional] Forces the recreation of any existing resources that match your current configuration. This option is useful for cleaning up stale resources from previous failed attempts.
-   --tags value                      [Optional] Specify tags which will be added to AWS Resources created for your cluster. Specify in the format 'key1=value1,key2=value2,key3=value3'
-   --region value, -r value          [Optional] Specifies the AWS region to use. Defaults to the region configured using the configure command
-   --ecs-profile value               [Optional] Specifies the name of the ECS profile configuration to use. Defaults to the default profile configuration. [$ECS_PROFILE]
-   --aws-profile value               [Optional] Use the AWS credentials from an existing named profile in ~/.aws/credentials. [$AWS_PROFILE]
-   --cluster-config value            [Optional] Specifies the name of the ECS cluster configuration to use. Defaults to the default cluster configuration.
-   --cluster value, -c value         [Optional] Specifies the ECS cluster name to use. Defaults to the cluster configured using the configure command
-   --launch-type value               [Optional] Specifies the launch type. Options: EC2 or FARGATE. Overrides the default launch type stored in your cluster configuration. Defaults to EC2 if a cluster configuration is not used.
-   --verbose, --debug                [Optional] Increase the verbosity of command output to aid in diagnostics.
-   
-   ```
+## 参考サイト
+- [Amazon ECS コマンドラインリファレンス](https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/ECS_CLI_reference.html)
+- [Amazon ECS パラメータの使用](https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/cmd-ecs-cli-compose-ecsparams.html)
+- [タスク定義パラメータ](https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/userguide/task_definition_parameters.html)
+- [ECS CLIを使ってDocker Composeのファイルを使ってECSにデプロイする](https://qiita.com/toshihirock/items/824a86da51015350a051)
+- 
