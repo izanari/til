@@ -13,11 +13,15 @@
         - タスクのコンテナの外部接続なし
       - bridge
         - タスクはDockerの組み込み仮想ネットワークを使用
+        - 動的ホストポートマッピングが利用できる
       - host
         - EC2インスタンスのネットワークインターフェースにコンテナポートを直接マッピング
+        - 動的ホストポートマッピングが利用できない
       - awsvpc
         - タスクごとにENIが割り当てる
+          - インスタンスタイプによりENIの上限があるため、注意すること
         - Fargate起動タイプを使用する場合は、awsvpcを利用する
+        - 動的ホストポートマッピングが利用できない
 - 定義ファイルの雛形生成方法
   - `aws ecs register-task-definition --generate-cli-skeleton > hoge-ecs-task-def.json`
 ### Task
