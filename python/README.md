@@ -39,3 +39,33 @@ if __name__ == "__main__":
     del test.x
 
 ```
+
+## モジュールのサーチパスを調べる
+```
+>>> import sys
+>>> for place in sys.path:
+...   print(place)
+```
+
+## 引数の渡し方
+### 辞書型で渡す
+- コード
+    ```
+    def myFunc(param1, **param2):
+    print(param1)
+    print(param2)
+    print(param2["a"])
+    print(param2["b"])
+
+
+    p1="test1"
+    p2={"a":1,"b":2}
+    myFunc(p1,**p2)
+    ```
+- 実行結果
+    ```
+    test1
+    {'a': 1, 'b': 2}
+    1
+    2
+    ```

@@ -51,3 +51,13 @@ aws ec2 describe-images \
 aws ec2 describe-images --owners self \
 --query 'reverse(sort_by(Images,&CreationDate))[:5].{id:ImageId}' 
 ```
+
+## インスタンス名でフィルターする
+```
+aws ec2 describe-instances --filter Name=tag:Name,Values=hogehoge
+```
+
+## インスタンス名からインスタンスIDと状態を取得する
+```
+aws ec2 describe-instances --filter Name=tag:Name,Values=hogehoge --query 'Reservations[*].Instances[*].{id:InstanceId,state:State.Name}'
+```
