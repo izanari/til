@@ -69,3 +69,7 @@
   - 鍵を管理するIAMユーザーおよびロールの定義
   - 鍵を使用できるIAM
   - 22ページ
+
+## 参考サイト
+- [AWS Key Management Service の概念](https://docs.aws.amazon.com/ja_jp/kms/latest/developerguide/concepts.html)
+- 

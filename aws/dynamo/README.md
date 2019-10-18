@@ -365,3 +365,15 @@ aws dynamodb get-item --table-name HogeTable --key fugafuga --projection-express
   ]
 }
 ```
+## その他
+### アトミックカウンターを実装する
+- RDSで`SQL AUTO_INCREMENT`を使わなくても実装することができます
+- https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/WorkingWithItems.html#WorkingWithItems.AtomicCounters
+```
+aws dynamodb update-item \
+ --table-name ProductCatalog \
+ --key '{"Id": {"N": "601"}}' \
+ --update-expression "SET Price = Price + :incr" \
+ --expression-attribute-value '{":incr":{"N":"5"}}' \
+ --return-values UPDATED_NEW
+ ```
