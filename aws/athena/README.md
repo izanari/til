@@ -13,3 +13,4 @@ FROM
 
 ## 参考ドキュメント
 - [Amazon Athena で CloudFront のアクセスログを集計する](https://dev.classmethod.jp/cloud/aws/athena-cloudfront-log-activity/)
+- [Amazon AthenaでいろいろなSELECTを実行してみる](https://dev.classmethod.jp/cloud/aws/amazon-athena-sqls/)
