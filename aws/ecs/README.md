@@ -39,6 +39,23 @@
   - DAEMON
     - コンテナインスタンスごとに１つのタスクのみをデプロイする
       - Fargateはサポートしていない
+- サービス定義パラメータ
+  - placementStrategy
+    - binpack
+      - field パラメータで指定したリソース(`cpu` or `memory`)の利用可能量が最も少ない利用可能候補にタスクを配置します。残メモリのもっとも少ないインスタンスに配置される。
+    - random
+      - タスクを利用可能なインスタンスにランダムに配置します
+      - field パラメータは使用しない
+    - spred
+      - field パラメータに基づいて、利用可能候補間で均等にタスクを分散して配置する
+      - field パラメータは、[Amazon ECS Task Placement](https://aws.amazon.com/jp/blogs/compute/amazon-ecs-task-placement/)を参照
+    ```
+    placementStrategy
+            {
+                "type": "binpack",
+                "field": ""
+            }
+    ```
 ### Cluster
 - タスクまたはサービスの論理グループ
 - クラスターには、Farget,EC2のどちらの起動タイプもタスクに含めることができる

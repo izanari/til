@@ -23,6 +23,9 @@
           }
         Handler: index.handler
   ```
+
+
+
 - DeploymentPreference
   - Deployの仕方を指定することができる
     - AllAtOnce
@@ -31,6 +34,28 @@
       - Lambda関数の実行のうち{x}%は最新バージョンを実行し、{y}分後にすべてが最新バージョンで実行される
     - Linear{x}Percent{y}Minutes
       - {y}分毎に{x}パーセントずつ新しいLambda関数へトラフィックを流し、100％になるまでこれを継続する
+
+#### AWS::Lambda::Functionの場合
+- コードの指定が異なります
+  - `ZipFile`はZIPファイルのパスではなく、インラインでコードを記述します
+```
+Type: AWS::Lambda::Function
+Properties: 
+  Code: 
+    S3Bucket: String
+    S3Key: String
+    S3ObjectVersion: String
+    ZipFile: String
+```
+- `ZipFile`
+```
+Code:
+  ZipFile:
+    "exports.handler = function(event, context){\n
+      console.log('Hello World');\n
+    }"
+```
+
 ## 使い方
 ### プロジェクトディレクトリを作成する
 ```

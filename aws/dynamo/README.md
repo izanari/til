@@ -31,6 +31,8 @@
 ## キャパシティの決め方
 - プロビジョンドとオンデマンドがある
 - オンデマンドならキャパシティを考える必要がない
+- GSIは別に設定する必要がある。ベーステーブルの設定は使わない。 
+  - ベーステーブルのWCU < GSIのWCU となるようにする
 ### キャパシティユニット
 - 書き込み
   - 1ユニット: 最大1KBのデータを1秒に1回書き込み可能
@@ -38,13 +40,17 @@
   - 1ユニット：最大4KBのデータを1秒に1回読み込み可能
     - 強い一貫性を持たない読み込みであれば1秒あたり2回
 ### プロビジョンドスループット
+- https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/ProvisionedThroughput.html#ItemSizeCalculations.Writes
+- https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
 - テーブル毎にReadとWriteのそれぞれに対し、必要な分だけのスループットキャパシティを割り当てる
   - Read:1000 , Write:100
   - この値はDB運用中にオンラインで変更することができる
   - ただし、スケールダウンは1日9回までしかできない
+
 - Read Capacity Units(RCU)
   - 1秒あたりの読み込み項目数x項目のサイズ(4KBブロック)
   - 結果整合性のある読み込みをする場合はスループットが２倍
+  - 1秒あたりのサイズを求めて（切り上げする）から計算すること
     - 例１
       - アイテムサイズ1.2KB→1.2/4=0.3→1に繰り上げ
       - 読み込み項目数1000回/秒
@@ -245,6 +251,7 @@ aws dynamodb get-item --table-name HogeTable --key fugafuga --projection-express
   - クロスリージョンレプリケーション
   - ユーザーの集計、分析、解析のための非同期集計
   - ホットデータとコールドデータでテーブルを分ける
+  - [DynamoDB ストリーム Kinesis Adapter を使用したストリームレコードの処理](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Streams.KCLAdapter.html)
 ## ストリームの表示タイプ
 |表示タイプ|概要|
 |---|---|
@@ -261,6 +268,8 @@ aws dynamodb get-item --table-name HogeTable --key fugafuga --projection-express
 - GetShadIterator
 - GetRecords
 ## DynamoDB Triggers
+- DynamoDB トリガーは、DynamoDB ストリームを Lambda 関数に接続します。テーブル内の項目が変更されるたびに、新しいストリームレコードが書き込まれ、その後 Lambda 関数がトリガーされて実行されます。
+  - [DynamoDB ストリーム と AWS Lambda のトリガー](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Streams.Lambda.html)
 ### ユースケース
 - DynamoDBへの書き込みに応じて値をチェックしつつ別テーブルの更新やプッシュ通知を実行
 - DynamoDBの更新状況の監査ログをS3へ保存

@@ -35,11 +35,13 @@
 ### Lambda
 - functionを指定する
 ### フックのリスト
+- (Start)
 - BeforeAllowTraffic
     - トラフィックがデプロイされた Lambda 関数のバージョンに移行する前にタスクを実行します。
 - (AllowTraffic)
 - AfterAllowTraffic
     - トラフィックがデプロイされた Lambda 関数のバージョンに移行した後でタスクを実行します。
+- (End)
 
 ### EC2
 - Deploy方式によりhookが異なる

@@ -33,6 +33,7 @@
         "Metadata": {}
       }
       ```
+      - [Amazon S3 で管理された暗号化キーによるサーバー側の暗号化 (SSE-S3) を使用したデータの保護](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/UsingServerSideEncryption.html)
 
     - SSE-KMS
       - Key Managemtn Service(KMS)の鍵を利用して暗号化
@@ -52,16 +53,21 @@
         "Metadata": {}
         }
       ```
+      - [AWS KMS に保存されたキー (SSE-KMS) でサーバー側の暗号化を使用してデータを保護する](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/UsingKMSEncryption.html)
 
     - SSE-C
       - ユーザーが提供した鍵を利用して暗号化
         - カスタムキーストア（CloudHSM)が必要
+      - [お客様が用意した暗号化キーによるサーバー側の暗号化 (SSE-C) を使用したデータの保護](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html)
+  
 - クライアントサイド暗号化
     - 暗号化プロセスはユーザー側で管理する
     - クライアント側で暗号化したデータをS3へアップロードする
     - 暗号化種別
       - AWS KMSで管理されたカスタマーキーを利用して暗号化
       - クライアントが管理するカスタマーキーを利用して暗号化
+- https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html#RESTObjectPUT-responses-examples
+- https://aws.amazon.com/jp/blogs/security/how-to-prevent-uploads-of-unencrypted-objects-to-amazon-s3/
 ### 参考URL
 - [サーバー側の暗号化を使用したデータの保護](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/serv-side-encryption.html)
 ## リダイレクトするには

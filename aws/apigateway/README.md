@@ -9,8 +9,17 @@
 ### 統合タイプ
 - CloudFormationでは、`AWS::ApiGateway::Method`の`Integration`で指定する
 - パラメータの種類
-  - AWS
+  - AWS 
+    - AWSサービス、もしくはLambda関数
   - AWS_PROXY
+    - Lambda関数+Lambdaプロキシ統合
   - HTTP
+    - HTTP
   - HTTP_PROXY
+    - HTTP+HTTPプロキシ統合
   - MOCK
+    - MOCK
+  - VPCリンクは、ConnectionTypeで指定をする
+- 参照URL
+  - https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/api-gateway-api-integration-types.html
+  - https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-resource.html

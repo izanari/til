@@ -288,6 +288,7 @@
 - IAMロールにより認証情報はAWSが自動的にローテーションする
 - AWS SDKによって認証情報取得と有効期限切れ前の再取得を自動的に実施可能
 - AWS CLIもIAMロールに対応済み
+- [一時的なセキュリティ認証情報のリクエスト](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison)
 
 ### APIオプションの比較
 |AWS STS API|呼び出し元|有効期限（min,max,default)|MFAサポート|セッションポリシーのサポート|認証情報に対する制限|
