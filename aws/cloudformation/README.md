@@ -39,6 +39,36 @@
     - Description
     - ConstrailDescription
       - 入力した値がAllowedPatternやMaxLengthなどの制約に引っかかった時に表示する説明
+  - SSMパラメータを使うことができる。[ここ](https://aws.amazon.com/jp/blogs/mt/integrating-aws-cloudformation-with-aws-systems-manager-parameter-store/)を参照しましょう
+    - 事前に登録しておく
+      ```
+      # Create a parameters for Dev and Prod environments in Systems Manager Parameter Store
+      aws ssm put-parameter --name myEC2TypeDev --type String --value “t2.small”
+      aws ssm put-parameter --name myEC2TypeProd --type String --value “m4.large”
+
+      ```
+    - テンプレートではこのように指定する
+      ```
+        # Reference/use existing Systems Manager Parameter in CloudFormation
+        Parameters:
+          InstanceType :
+            Type : 'AWS::SSM::Parameter::Value<String>'
+            Default: myEC2TypeDev
+          KeyName :
+            Type : 'AWS::SSM::Parameter::Value<AWS::EC2::KeyPair::KeyName>'
+            Default: myEC2Key
+          AmiId:
+            Type: 'AWS::EC2::Image::Id'
+            Default: 'ami-60b6c60a'
+            
+        Resources :
+          Instance :
+            Type : 'AWS::EC2::Instance'
+            Properties :
+              Type : !Ref InstanceType
+              KeyName : !Ref KeyName
+              ImageId : !Ref AmiId 
+       ```
 
 - Mappings
 - Conditions

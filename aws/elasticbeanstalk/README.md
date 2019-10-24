@@ -61,12 +61,14 @@
 - 新しいリビジョンのコードを、新しいインスタンスに反映させ、インスタン毎入れ替える
 #### 選択肢
 - デプロイポリシーに従った既存環境へのデプロイ
-  - All at once --> In Place
-  - Rolling --> In Place & Blue/Green
-  - Rolling with additional batch
-  - Immutable
-- URL Swap による既存環境と新環境の切り替え
-- Amazon Route53 を利用した既存環境と新環境の切り替え
+  - All at once --> (In Place)
+  - Rolling --> (In Place)
+    - [Rolling] (ローリング) デプロイでは、Elastic Beanstalk は環境の EC2 インスタンスを複数のバッチに分割し、アプリケーションの新しいバージョンを一度に 1 つのバッチにデプロイするため、環境内の残りのインスタンスは古いアプリケーションバージョンを実行した状態になります。つまりローリングデプロイ中は、アプリケーションの古いバージョンでリクエストを処理するインスタンスもあり、新しいバージョンでリクエストを処理するインスタンスも存在します。
+  - Rolling with additional batch --> (In place & Blue/Green )
+  - Immutable --> ( Blue/Green )
+    - [Immutable] デプロイは、変更不可能な更新を実行して、古いバージョンを起動しているインスタンスと並行しながら、別の Auto Scaling グループにあるアプリケーションの新しいバージョンを起動している新しいインスタンスのフルセットを起動します。[Immutable] デプロイは、部分的に完了したローリングデプロイにより発生する問題を防止できます。新しいインスタンスがヘルスチェックをパスしなかった場合、Elastic Beanstalkはそれを終了し、元のインスタンスをそのまま残します。
+- URL Swap による既存環境と新環境の切り替え --> ( Blue/Green )
+- Amazon Route53 を利用した既存環境と新環境の切り替え --> ( Blue/Green )
 #### デプロイに関する設定
 - バッチタイプ
   - 一度にデプロイを反映させる台数（バッチ）をどう決めるかを設定する
@@ -204,3 +206,11 @@
   % eb --version
   EB CLI 3.15.3 (Python 3.7.2)
   ```
+### 参照
+- [Elastic Beanstalk コマンドラインインターフェイス（EB CLI）](https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/eb-cli3.html)
+- [プロジェクトフォルダの代わりに圧縮ファイルをデプロイする](https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/eb-cli3-configuration.html#eb-cli3-artifact)
+
+## 参照サイト
+- [ダウンタイム、データベース同期の問題、またはデータの損失なしで Amazon RDS インスタンスを Elastic Beanstalk 環境から分離するには、どうすれば良いですか?](https://aws.amazon.com/jp/premiumsupport/knowledge-center/decouple-rds-from-beanstalk/)
+- [デプロイポリシーと設定](https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/using-features.rolling-version-deploy.html)
+- [変更不可能な環境の更新](https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/environmentmgmt-updates-immutable.html)

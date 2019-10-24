@@ -75,9 +75,24 @@
 - 非同期呼び出し
   - InvocationTypeはEvent
   - レスポンスの内容はリクエストが正常に受付されたかどうかのみ
+  - 以下の読み出しをｓｈちえも、response.jsonには情報が含まれない
+  ```
+  $ aws lambda invoke --function-name my-function  --invocation-type Event --payload '{ "key": "value" }' response.json
+  {
+      "StatusCode": 202
+  }
+  ```
 - 同期呼び出し
+  - https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/invocation-sync.html
   - InvoationTYpeはRequestResponse
   - 実行完了時にレスポンスが返ってくる。内容はLambda関数内でセットされる
+  ```
+  $ aws lambda invoke --function-name my-function --payload '{ "key": "value" }' response.json
+  {
+      "ExecutedVersion": "$LATEST",
+      "StatusCode": 200
+  }
+  ```
 
 ### リトライ
 - エラーの種類、イベントソース、呼び出しタイプによって異なる
