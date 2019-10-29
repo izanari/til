@@ -2,6 +2,7 @@
 
 ## テーブル
 ### テーブルを作成する
+- オンデマンド(`PAY_PER_REQUEST`)
 ```
 aws dynamodb create-table \
 --table-name Counter \
@@ -10,8 +11,34 @@ aws dynamodb create-table \
 --billing-mode PAY_PER_REQUEST \
 --endpoint-url http://localhost:8000
 ```
-- `PAY_PER_REQUEST`はオンデマンド
-
+- RCU/WCUを指定して作成する
+```
+aws dynamodb create-table \
+--table-name Person \
+--attribute-definitions AttributeName=Id,AttributeType=S AttributeName=Group,AttributeType=S \
+--key-schema AttributeName=Id,KeyType=HASH AttributeName=Group,KeyType=RANGE \
+--billing-mode PROVISIONED \
+--provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=20 \
+--endpoint-url http://localhost:8000
+```
+- GSIを作る
+```
+aws dynamodb update-table \
+ --table-name Person \
+ --attribute-definitions AttributeName=FirstName,AttributeType=S \
+ --billing-mode PROVISIONED \
+ --endpoint-url http://localhost:8000 \
+ --global-secondary-index-updates '[{
+     "Create": {
+         "IndexName":"Person-Name-index",
+         "KeySchema":[
+             {"AttributeName":"FirstName", "KeyType":"HASH"},
+             {"AttributeName":"Id", "KeyType":"RANGE"}
+         ],
+         "Projection": {"ProjectionType":"ALL"},
+         "ProvisionedThroughput": { "ReadCapacityUnits":10, "WriteCapacityUnits":20 }
+     } }]' 
+```
 ### テーブルの内容を確認する
 ```
 aws dynamodb describe-table \
@@ -29,6 +56,20 @@ aws dynamodb put-item \
  --endpoint-url http://localhost:8000
 ```
 
+### 上書きはしない
+```
+aws dynamodb put-item \
+ --table-name Person \
+ --item '{ "Id": {"S": "235"}, "Group": {"S":"AWS"}, "FirstName":{"S":"HogeHoge"}}'\
+ --return-values 'ALL_OLD' \
+ --condition-expression "attribute_not_exists(Id)" \
+ --return-consumed-capacity INDEXES \
+ --endpoint-url http://localhost:8000
+```
+- 失敗した時の表示
+  ```
+   An error occurred (ConditionalCheckFailedException) when calling the PutItem operation: The conditional request failed
+  ```
 ### アイテムを1件取得する
 ```
 aws dynamodb get-item \
@@ -69,4 +110,5 @@ aws dynamodb update-item \
  ```
  
 ## 参考サイト
+- [比較演算子および関数リファレンス](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html)
 - https://blog.brains-tech.co.jp/entry/2015/09/30/222148

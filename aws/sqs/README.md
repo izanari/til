@@ -67,6 +67,8 @@
 - 遅延キューは、キュー全体に有効になる。
 - メッセージタイマーのほうが優先されます。
 - メッセージタイマーの設定方法
+- スタンダードキューの場合は、キューごとの遅延設定はありません。設定を変更しても、既にキューにあるメッセージには影響しない。
+- [Amazon SQS 遅延キュー](https://docs.aws.amazon.com/ja_jp/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-delay-queues.html)
 ```
 aws sqs send-message --queue-url <value> --message-body <value> --delay-seconds <value>
 ```

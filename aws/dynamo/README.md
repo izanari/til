@@ -11,7 +11,7 @@
 ## 参考ドキュメント
 - [コンセプトから学ぶAmazon DynamoDB – シリーズ –](https://dev.classmethod.jp/series/conceptual-learning-about-dynamodb/)
 - [DynamoDB – 特集カテゴリー ](https://dev.classmethod.jp/referencecat/aws-dynamodb/)
-
+- [DynamoDB のベストプラクティス](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/best-practices.html)
 
 ## 料金
 ### プロビジョンドされたキャパシティの場合
@@ -90,7 +90,40 @@
   - ひとつひとつのパーティションのキャパシティが低い状態になる。結果としてキャパシティエラーを起こしやすい状態になる
 - Burst Capacity
   - パーティションごとのキャパシティのうち、利用されなかった分を過去300秒分までリサーブされる。プロビジョン分を超えたバーストトラフィックを処理するために利用する
-
+- `ReturnConsumedCapacity`
+  - 消費したキャパシティを知りたい時は、ReturnConsumedCapacityパラメータを付与する。デフォルトはNONEになっているため、返ってこない
+  - [クエリで消費されるキャパシティーユニット](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Query.html#Query.CapacityUnits)
+    - INDEXES
+      - レスポンスは、アクセスする各テーブルとインデックスの消費されるキャパシティーとともに、消費される読み込みキャパシティーユニットの合計値を示します。
+      - put-itemした時の表示
+        ```
+          {
+            "ConsumedCapacity": {
+                "TableName": "Person",
+                "CapacityUnits": 2.0,
+                "Table": {
+                    "CapacityUnits": 1.0
+                },
+                "GlobalSecondaryIndexes": {
+                    "Person-Name-index": {
+                        "CapacityUnits": 1.0
+                    }
+                }
+            }
+          }
+        ```
+    - TOTAL
+      - レスポンスには消費された読み込みキャパシティーユニットの合計値が含まれます。
+        ```
+          {
+            "ConsumedCapacity": {
+                "TableName": "Person",
+                "CapacityUnits": 2.0
+            }
+          }
+        ``` 
+    - NONE
+      - デフォルト値
 
 ## 整合性モデル
 - Write
@@ -191,9 +224,9 @@ aws dynamodb get-item --table-name HogeTable --key fugafuga --projection-express
 - Sort key以外に絞り込み検索を行うkeyを持つことができる
 - Partation keyが同一で、他のアイテムからの検索のために利用
 - すべての要素（テーブルとインデックス）の合計サイズを各ハッシュキーごとに10GBに制限
-- ハッシュキーテーブルには設定ができない。複合キーテーブルのみ設定が可能。
-- ハッシュキーはそのテーブルと同じキーしか設定ができない
-- レンジキーは別の属性を指定する
+- ハッシュキーのみの設定ができない。複合キーのみ設定が可能。
+- **ハッシュキーはそのテーブルと同じキーしか設定ができない**
+- レンジキーは別の属性を指定することができる
 - テーブル作成時にしか設定できない
 #### Global Secondary Index (GSI)
 - Partation Key属性の代わりになる
@@ -213,8 +246,11 @@ aws dynamodb get-item --table-name HogeTable --key fugafuga --projection-express
 - LSI/GSIは便利だがスループットやストレージ容量が追加で必要になる
 - インデックスが増えれば増えるほど書き込みコストが上がる
 - セカンダリインデックスに強く依存するテーブル設計になるようであれば、一度RDBで要件を満たせないかを確認してすることがベター
+- 強い整合性読み込みは、LSIのみ。GSIは結果整合性しかサポートしていない
+- LSIはベーステーブルのCUを消費するが、GSIでは独自にプロビジョニングしたCUを消費する
 ##### 参考ドキュメント
 - [GSI OVERLOADING について 自分なりにまとめてみた](https://dev.classmethod.jp/cloud/aws/basic-of-gsi-overloading/)
+- [セカンダリインデックスを使用したデータアクセス性の向上](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/SecondaryIndexes.html)
 
 
 ## DynamoDBの機能
@@ -400,3 +436,18 @@ aws dynamodb update-item \
  --expression-attribute-value '{":incr":{"N":"5"}}' \
  --return-values UPDATED_NEW
  ```
+
+### optimistic（オプティミスティック） と pessimistic（ペシミスティック） concurency
+
+- pessimistic concurency
+  - データの競合が多い環境で使用されることが多い。行でロックし、ロック解除されるまで操作が実行できない
+  - レコードが長時間ロックされる場合には向いていない
+- optimisitic concurency
+  - 行ロックしない
+  - 行の読み取り後に別のユーザーがその行を変更したかどうかをアプリで確認する必要がある
+- 参考
+  - [オプティミスティック コンカレンシー](https://docs.microsoft.com/ja-jp/dotnet/framework/data/adonet/optimistic-concurrency)
+
+### その他
+- [自分のテーブルにはスロットリングがかけられていますが、消費したキャパシティーユニットはまだプロビジョンドキャパシティーユニットを下回っています。](https://aws.amazon.com/jp/premiumsupport/knowledge-center/throttled-ddb/)
+- [書き込みシャーディングを使用してワークロードを均等に分散させる](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/bp-partition-key-sharding.html)

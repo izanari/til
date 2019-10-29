@@ -70,6 +70,13 @@
 - https://aws.amazon.com/jp/blogs/security/how-to-prevent-uploads-of-unencrypted-objects-to-amazon-s3/
 ### 参考URL
 - [サーバー側の暗号化を使用したデータの保護](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/serv-side-encryption.html)
+
+## クロスリージョンレプリケーションを有効にする
+- ソースバケットと宛先バケットでバージョン管理が有効になっている必要があります。
+- Amazon S3には、ユーザーに代わってそのソースバケットから宛先バケットにオブジェクトを複製するアクセス許可が必要です。
+- [レプリケーション](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/replication.html)
+
+
 ## リダイレクトするには
 ### オブジェクトにリダイレクトルールを設定する
 ```
@@ -174,3 +181,12 @@ aws s3api put-object --bucket mybucket --key index.html --website-redirect-locat
 ## その他
 ### s3syncをはやくする
 - [AWS CLI S3 Configurationを試したら想定以上にaws s3 syncが速くなった話](https://dev.classmethod.jp/cloud/aws/aws-s3-sync-with-aws-cli-s3-configuration/)
+
+# Galcier
+## タイプ
+- Standard
+  - 数時間以内にアーカイブにアクセスできます。通常、標準的な取得は3〜5時間以内に完了します。これがデフォルトのオプションです。
+- Bulk Retriebal
+  - Glacierの最も低コストの検索オプションであり、1日で大量（ペタバイト単位）のデータを安価に取得できます。通常、一括取得は5〜12時間以内に完了します。
+- Expedited Retrieval
+  - 迅速な取得により、アーカイブのサブセットに対する緊急の要求がときどき必要になる場合に、データにすばやくアクセスできます。迅速な取得は通常、1〜5分以内に利用可能になります。

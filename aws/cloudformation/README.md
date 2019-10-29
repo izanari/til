@@ -20,6 +20,7 @@
   ```
 
 - Parameters
+  - [パラメータ](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html)
   - スタック作成・更新時にユーザに入力させる値を定義
   - データ型、デフォルト値、最大、最小値などを設定可能
   - 主なプロパティ
@@ -69,7 +70,8 @@
               KeyName : !Ref KeyName
               ImageId : !Ref AmiId 
        ```
-
+      - 参照ページ
+        - [動的な参照を使用してテンプレート値を指定する](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/dynamic-references.html)
 - Mappings
 - Conditions
 - Transform
