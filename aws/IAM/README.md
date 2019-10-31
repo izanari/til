@@ -354,7 +354,8 @@
   - http://blog.serverworks.co.jp/tech/2016/05/18/sts/
   - https://christina04.hatenablog.com/entry/assume-role
  
-
+## フェデレーション
+- [外部で認証されたユーザー（ID フェデレーション）へのアクセスの許可](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_roles_common-scenarios_federated-users.html)
 
 ## 参照ドキュメント
 - [AWS Identity and Access Management (IAM) Part1](https://www.slideshare.net/AmazonWebServicesJapan/20190129-aws-black-belt-online-seminar-aws-identity-and-access-management-iam-part1)

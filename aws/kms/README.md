@@ -60,7 +60,14 @@
 - Decrypt
 - GenerateDataKey
   ```
-  aws kms generate-data-key --key-id 2d89b038-6329-4ac8-b66e-xxxxxxxxx --profile fork_y.izawa --key-spec AES_256
+  aws kms generate-data-key --key-id 2d89b038-6329-4ac8-b66e-xxxxxxxxx --key-spec AES_256
+  (出力)
+    {
+        "CiphertextBlob": "AQIDAHhY5QWG9E2b2pLnETCLcrVnZeDcwXOYeOYbIkss34BOawEaxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "Plaintext": "xxxxxxxxxxxxxxxxxxxxxxxx/xxxx",
+        "KeyId": "arn:aws:kms:ap-northeast-1:xxxxxxxx:key/xxxxxxxxxxxxxxx"
+    }
+  ```
 
 ## 暗号鍵管理機能
 - 鍵の生成
