@@ -13,3 +13,6 @@
       - SourceCache
       - CustomCache
         - 有効な場合、実行時にbuildspec.ymlから追加のキャッシュパスを読み取る
+## 設定
+- ログ
+  - S3とCloudWatchに出力することができる

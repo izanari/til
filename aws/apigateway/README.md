@@ -7,6 +7,9 @@
   - トークンベースのLambdaオーソライザー（TOKENオーソライザーとも呼ばれる）は、JSON Web Token（JWT）やOAuthトークンなどのベアラートークンで呼び出し元のIDを受け取ります。
   - 要求パラメーターベースのLambdaオーソライザー（REQUESTオーソライザーとも呼ばれます）は、ヘッダー、クエリ文字列パラメーター、stageVariables、および$ context変数の組み合わせで呼び出し元のIDを受け取ります。
 - WebSocket APIではリクエストベースのみがサポートされている
+### IAMユーザーで認証する
+- リクエストを署名バージョン4を使用して著名する
+  - [署名バージョン 4 署名プロセス](https://docs.aws.amazon.com/ja_jp/general/latest/gr/signature-version-4.html)
 
 ### 統合タイプ
 - [API Gateway API 統合タイプを選択する](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/api-gateway-api-integration-types.html)
