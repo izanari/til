@@ -44,3 +44,19 @@ systemctl daemon-reload
 ```
 find /var/www/html -name "mt-preview-*" -mmin +30 -exec rm -f {} \;
 ```
+
+## more
+- 現在の行番号を表示する
+  ```
+  =
+  ```
+- パターン検索する
+  ```
+  /パターン
+  ```
+
+## grep
+- 行数を表示する
+  ```
+  grep -n "hogehoge" fugafuga.txt
+  ```

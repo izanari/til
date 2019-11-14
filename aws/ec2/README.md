@@ -1,4 +1,19 @@
-# ec2
+# EC2
+## メトリクス
+### 標準のメトリクスで取得できるデータ
+- CPU使用率
+- ネットワーク使用率
+- ディスク I/O
+### カスタムメトリクスにしないと取得できない
+- ディスク使用率
+- swap使用率
+- メモリ使用率
+### [Amazon EC2 Linux インスタンスのメモリとディスクのメトリクスのモニタリング](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/mon-scripts.html)
+- 必要なアクセス権
+  - cloudwatch:PutMetricData
+  - cloudwatch:GetMetricStatistics
+  - cloudwatch:ListMetrics
+  - ec2:DescribeTags
 ## EBS
 - EBS暗号化はパフォーマンスに影響しない
 - 

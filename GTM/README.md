@@ -14,3 +14,6 @@
                     dataLayer.push({ 'event':'clickChange', 'mycategroy':'hogehoge', 'myaction':'fugafuga',  'mylabel':'kocyokocyo' });
 ```
 何かのイベントに返納して、このようなJSを出力します。
+
+## GTMかgtag.jsのどちらを使うか
+- [Google タグ マネージャーと gtag.js](https://support.google.com/tagmanager/answer/7582054?hl=ja)

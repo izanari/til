@@ -17,10 +17,10 @@
 - 統合タイムアウト値は、50ミリ秒〜29秒の間で設定することができる
 - パラメータの種類
   - AWS 
-    - AWSサービス、もしくはLambda関数
+    - AWSサービス、もしくはLambdaカスタム統合
   - AWS_PROXY
-    - Lambda関数+Lambdaプロキシ統合
-    - [API Gateway の Lambda プロキシ統合をセットアップする](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format)
+    - Lambdaプロキシ統合
+      - [API Gateway の Lambda プロキシ統合をセットアップする](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format)
   - HTTP
     - HTTP
   - HTTP_PROXY
@@ -34,7 +34,8 @@
 
 ### 設定
 - [API Gateway のメソッドリクエストをセットアップする](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/api-gateway-method-settings-method-request.html#setup-method-request-model)
-
+- 使用量プラン
+  - API を作成し、テストして、デプロイすると、API Gateway 使用量プランを使用して、顧客への提供商品として使用できるようになります。ビジネス要件および予算の制約に合った承認済みのリクエストレートとクォータで顧客に、選択した API へのアクセスを許可する使用量プランと API キーを設定できます。必要に応じて、API のデフォルトのメソッドレベルのスロットリング制限を設定したり、個別の API メソッドのスロットリング制限を設定したりできます。
 ## ディメンションとメトリクス
 - [Amazon API Gateway のディメンションおよびメトリクス](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/api-gateway-metrics-and-dimensions.html)
 ### API Gateway メトリクス
@@ -49,3 +50,22 @@
 ## APIキャッシュ
 - [API キャッシュを有効にして応答性を強化する](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/api-gateway-caching.html#override-api-gateway-stage-cache-for-method-cache)
   - [API を呼び出すためのアクセスの制御](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html)
+
+
+## レスポンスタイプ
+- [ゲートウェイレスポンスのタイプ](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/supported-gateway-response-types.html)
+  
+|タイプ|コード|説明|
+|--|--|--|
+|INTEGRATION_FAILURE|504|統合が失敗した場合のゲートウェイレスポンス。(*1)|
+|INTEGRATION_TIMEOUT|504|統合がタイムアウトした場合のゲートウェイレスポンス。(*1)|
+|API_CONFIGURATION_ERROR|500|API 設定が無効な場合のゲートウェイレスポンス。たとえば、無効なエンドポイントアドレスが送信された場合、バイナリサポートが有効になっているときにバイナリデータに対する Base64 デコーディングが失敗した場合、統合レスポンスマッピングがいずれのテンプレートとも一致せず、デフォルトテンプレートも設定されていない場合などが該当します。(*1)|
+
+- (*1) レスポンスタイプが未指定の場合、このレスポンスはデフォルトで DEFAULT_5XX タイプになります。
+
+## 制限
+- [Amazon API Gateway の制限事項と重要な注意点](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/limits.html)
+### REST API 
+- 統合のタイムアウト
+  - Lambda、Lambda プロキシ、HTTP、HTTP プロキシ、AWS 統合など、すべての統合タイプで 50 ミリ秒～29 秒。
+  - よって、Lambdaは30秒以上かかる場合はAPI Gatewayには向いていない

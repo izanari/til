@@ -79,6 +79,7 @@
 
 ## ECSコンテナエージェントの設定
 - ECS Optimized AMIのLinuxバリアントを使用して起動された場合は、環境変数を`/etc/ecs/ecs.config`ファイルに設定してからエージェントを開始することができます
+  - [Amazon ECS コンテナエージェントの設定](https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/ecs-agent-config.html)
   - 使用できるパラメータ
     - ECS_CLUSTER
       - このエージェントが確認するクラスター。この値を定義しない場合、default クラスターが想定されます。default クラスターが存在しない場合は、Amazon ECS コンテナエージェントによってその作成が試みられます。default 以外のクラスターを指定した場合、そのクラスターが存在しないと、登録は失敗します。
