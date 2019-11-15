@@ -357,3 +357,47 @@
 - デフォルトではAWSアカウントにあるLambda用のAWS管理CMSが使用される
 - 自分で管理するCMSを使用することもできる
 - コンソール上で暗号化ヘルパーを使う場合は自分で管理するCMSを指定する
+
+## CloudFormation/SAM
+### ソースコードの指定方法
+- CloudFormation
+  - Codeを使う(1)
+    ```
+    MyFunction:
+      Type: "AWS::Lambda::Function"
+      Properties:
+        Code:
+          S3Bucket: yourbucketname
+          S3Key: yourkey
+    ```
+  - Codeを使う(2)
+    ```
+    MyFunction:
+      Type: "AWS::Lambda::Function"
+      Properties:
+        Code:
+          ZipFile: >
+            import boto3
+            def lambda_handler(event, context):
+              print("Hello World")
+    ```
+- SAM
+  - CodeUriを使う
+    ```
+    Myfunction:
+      Type: AWS::Serverless::Function
+      Properties:
+        CodeUri: s3://yourbucket
+    ```
+    - sam packageがS3のパスに変換してくれる
+
+  - Inlineを使う
+    ```
+    Myfunction:
+      Type: AWS::Serverless::Function
+      Properties:
+        InlineCode: |
+            import boto3
+            def lambda_handler(event, context):
+              print("Hello World")
+    ``` 

@@ -12,11 +12,11 @@
   Resources:
     MyInstance:
       Type: "AWS::EC2::Instance"
-  Metadata:
-    MyInstance:
-      Description: "Information about the instance"
-    Database:
-      Description: "Information about the database"
+    Metadata:
+      MyInstance:
+        Description: "Information about the instance"
+      Database:
+        Description: "Information about the database"
   ```
 
 - Parameters
@@ -74,12 +74,35 @@
         - [動的な参照を使用してテンプレート値を指定する](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/dynamic-references.html)
 - Mappings
 - Conditions
+  - リソースを作成するかどうか
+    ```
+    Conditions:
+      CreateResource: !Equals [ !Ref Env,Prod ]
+
+    Resources:
+      EC2Instance:
+        Type: "AWS::EC2::Instance"
+        Condition: CreateResource
+        Properties:
+          InstanceType: t3.small
+    ```
+
 - Transform
 - Resources(必須)
 - Outputs
   - AWSアカウント毎にリージョン内でユニークなエクスポート名である必要がある
   - リージョンを超えて参照することはできない
 
+## ヘルパースクリプト
+- [CloudFormation ヘルパースクリプトリファレンス](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/cfn-helper-scripts-reference.html)
+- cfn-init
+  - リソースメタデータの取得と解釈、パッケージのインストール、ファイルの作成、およびサービスの開始で使用します。
+- cfn-signal
+  - CreationPolicy または WaitCondition でシグナルを送信するために使用し、前提となるリソースやアプリケーションの準備ができたときに、スタックの他のリソースを同期できるようにします。
+- cfn-get-metadata
+  - 特定のキーへのリソースまたはパスのメタデータを取得するために使用します。
+- cfn-hup
+  - メタデータへの更新を確認し、変更が検出されたときにカスタムフックを実行するために使用します。
 ## tips
 - 疑似パラメータを使う
   - AWSアカウントIDは埋め込まないようにする
