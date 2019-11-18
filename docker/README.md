@@ -1,5 +1,23 @@
 # Docker
 
+## よくやる設定
+### php-apache
+- apcheのリダイレクトを有効にする
+- phpからmysqlに接続できるようにする
+```
+FROM php:7.3-apache
+
+RUN \
+  { apt-get update; \
+    apt-get install -y zlib1g-dev libzip-dev; \
+    docker-php-ext-install zip; \
+    docker-php-ext-install mysqli; \
+    docker-php-ext-configure zip; \
+    docker-php-ext-configure mysqli ; \
+    ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load; \
+  }
+```
+
 ## たまに使うコマンド
 ### コンテナが起動しないときにイメージを消す
 ```

@@ -29,7 +29,7 @@
   - 6MB（同期）
   - 256KB（非同期）
 - デプロイパッケージのサイズ
-  - 50MB(zip圧縮済み、直接アップロード)
+  - コンソールからは50MB(zip圧縮済み、直接アップロード)
     - S3を使えばこの制限は回避できる
   - 250MB（解凍）
     - 関数とすべてのレイヤーの解凍された合計サイズ
@@ -361,7 +361,7 @@
 ## CloudFormation/SAM
 ### ソースコードの指定方法
 - CloudFormation
-  - Codeを使う(1)
+  - Codeを使う
     ```
     MyFunction:
       Type: "AWS::Lambda::Function"
@@ -370,7 +370,8 @@
           S3Bucket: yourbucketname
           S3Key: yourkey
     ```
-  - Codeを使う(2)
+  - ZipFileを使う
+    - ただし、Node.jsとPythonのみ
     ```
     MyFunction:
       Type: "AWS::Lambda::Function"

@@ -71,3 +71,15 @@ function initialize_tinymce_styles($init_array)
 add_filter('tiny_mce_before_init', 'initialize_tinymce_styles', 10);
 ```
 - オリジナルのスタイルは、```wp-includes/js/tinymce/themes/inlite/theme.js```で定義されている
+
+## セキュリティ対策
+### プラグイン
+- Wordfence
+  - https://ja.wordpress.org/plugins/wordfence/
+  - 機能
+    - MFA
+      - MFAをバイパスさせるIPアドレスを指定できます
+- SiteGuard WP Plugin
+  - https://ja.wordpress.org/plugins/siteguard/
+- All In One WP Security & Firewall
+  - https://ja.wordpress.org/plugins/all-in-one-wp-security-and-firewall/

@@ -69,14 +69,14 @@
 - メッセージタイマーの設定方法
 - スタンダードキューの場合は、キューごとの遅延設定はありません。設定を変更しても、既にキューにあるメッセージには影響しない。
 - [Amazon SQS 遅延キュー](https://docs.aws.amazon.com/ja_jp/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-delay-queues.html)
-```
-aws sqs send-message --queue-url <value> --message-body <value> --delay-seconds <value>
-```
+  ```
+  aws sqs send-message --queue-url <value> --message-body <value> --delay-seconds <value>
+  ```
 - 遅延キューの設定方法
-```
-aws sqs create-queue --queue-name <value>
---attributes DelaySeconds=10
-```
+  ```
+  aws sqs create-queue --queue-name <value>
+  --attributes DelaySeconds=10
+  ```
 
 ## ショートポーリングとロングポーリング
 - 通常はロングポーリングを使用する
