@@ -56,6 +56,13 @@
                 "field": ""
             }
     ```
+- CLI
+  - サービスを作成する
+    - schedulingStrategyがDAEMONの時は、desired-countは必要ない
+    ```
+    aws ecs create-service --service-name ecs-sample --task-definition ecs-sample-task --desired-coint 10
+    ```
+
 ### Cluster
 - タスクまたはサービスの論理グループ
 - クラスターには、Farget,EC2のどちらの起動タイプもタスクに含めることができる

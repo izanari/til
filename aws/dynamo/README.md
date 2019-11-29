@@ -448,6 +448,14 @@ aws dynamodb update-item \
 - 参考
   - [オプティミスティック コンカレンシー](https://docs.microsoft.com/ja-jp/dotnet/framework/data/adonet/optimistic-concurrency)
 
+### ページネーション
+- page-size
+  - アイテムの数には影響しないページサイズ
+- max-items
+  - アイテムの総数。指定された値を超える場合は、NextTokenが提供され、ページネーションを再開するにはMextToken値を指定します
+    ```
+    aws s3 api list-objects --bucket my-bucket --max-items 100 --starting-token aaaaaaaaaaa
+    ```
 ### その他
 - [自分のテーブルにはスロットリングがかけられていますが、消費したキャパシティーユニットはまだプロビジョンドキャパシティーユニットを下回っています。](https://aws.amazon.com/jp/premiumsupport/knowledge-center/throttled-ddb/)
 - [書き込みシャーディングを使用してワークロードを均等に分散させる](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/bp-partition-key-sharding.html)

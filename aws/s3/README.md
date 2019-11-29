@@ -34,6 +34,9 @@
       }
       ```
       - [Amazon S3 で管理された暗号化キーによるサーバー側の暗号化 (SSE-S3) を使用したデータの保護](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/UsingServerSideEncryption.html)
+      - REST APIでアップロードするには
+        - `x-amz-server-side-encryption`
+          - `AES256`とする
 
     - SSE-KMS
       - Key Managemtn Service(KMS)の鍵を利用して暗号化
@@ -54,11 +57,26 @@
         }
       ```
       - [AWS KMS に保存されたキー (SSE-KMS) でサーバー側の暗号化を使用してデータを保護する](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/UsingKMSEncryption.html)
+      - REST APIでアップロードするには以下のヘッダーを付与する必要がある
+        - `x-amz-server-side​-encryption`
+          - `aws：kms`を指定する
+        - x-amz-server-side-encryption-aws-kms-key-id
+          - 省略可能。省略した場合はデフォルトのkeyが使用される
+        - x-amz-server-side-encryption-context
 
     - SSE-C
       - ユーザーが提供した鍵を利用して暗号化
         - カスタムキーストア（CloudHSM)が必要
       - [お客様が用意した暗号化キーによるサーバー側の暗号化 (SSE-C) を使用したデータの保護](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html)
+      - REST APIでアップロードするには以下のヘッダーを付与する必要がある
+        - `x-amz-server-side​-encryption​-customer-algorithm`
+          - 暗号化アルゴリズムを指定するには、このヘッダーを使用します。ヘッダーの値は "AES256" である必要があります。 
+        - `x-amz-server-side​-encryption​-customer-key` 
+          - Amazon S3 でデータを暗号化または復号するために使用する base64 でエンコードされた 256 ビットの暗号化キーを指定するには、このヘッダーを使用します。 
+        - `x-amz-server-side​-encryption​-customer-key-MD5`
+          - RFC 1321 に従って、暗号化キーの base64 エンコードされた 128 ビット MD5 ダイジェストを指定するには、このヘッダーを使用します。Amazon S3 では、このヘッダーを使用してメッセージの整合性を調べて、送信された暗号化キーにエラーがないことが確認されます。
+      - Amazon S3 コンソールを使用してオブジェクトをアップロードし、SSE-C をリクエストすることはできません。また、コンソールを使用して、SSE-C を使用して保存されている既存のオブジェクトを更新すること (ストレージクラスの変更やメタデータの追加など) もできません。 
+      - http接続を拒否することができる
   
 - クライアントサイド暗号化
     - 暗号化プロセスはユーザー側で管理する
