@@ -22,7 +22,12 @@ cat << EOL | tee -a /etc/supervisord.conf
 files = /etc/supervisor-powercms.conf
 EOL
 
-#mkdir /var/log/supervisor
+if [ -d /var/log/supervisor ]
+then
+ :
+else 
+ mkdir /var/log/supervisor
+fi
 chown apache:root /var/log/supervisor
 touch /var/log/supervisor/powercms.log
 touch /var/log/supervisor/powercms-error.log
@@ -80,5 +85,7 @@ WantedBy = multi-user.target
 EOL
 
 systemctl link /etc/supervisor.service
+systemctl enable /etc/supervisor.service
+systemctl list-unit-files | grep super
 systemctl start supervisor
-systemctl status supervisor
+systemctl status supervisor 
