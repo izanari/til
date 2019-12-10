@@ -60,3 +60,22 @@
         </IfModule>
 ```
 よく`SetOutputFilter DEFLATE`を記述しているサイトがあるが、これを記述するとMIMEタイプに関係なくすべてが圧縮されてしまいます。html/css/jsだけを圧縮したい場合は上記のように記述しましょう
+
+### リダイレクト
+- [RewriteRuleのフラグと、RewriteCondの変数一覧](https://qiita.com/tsukaguitar/items/e37245260f0b1407341d)
+```
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+# index.php は何もしない。ハイフンは何もしない
+# [L]はそこで終了
+RewriteRule ^index\.php$ - [L]
+# ファイルが実在すれば除外
+RewriteCond %{REQUEST_FILENAME} !-f
+# ディレクトリがあれば除外
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+```
+
+- 上記でリダイレクトしても`REQUEST_URI`ではリダイレクトする前のリクエストURIを取得することができます
