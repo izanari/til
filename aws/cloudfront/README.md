@@ -14,3 +14,9 @@
   
 ## 参考ドキュメント
 - [CloudFrontのデフォルトルートオブジェクトとS3の静的ウェブサイトホスティングのインデックスドキュメントの動作の違い](https://dev.classmethod.jp/cloud/aws/cloudfront_s3_difference/)
+
+## ログ
+### S3バケットに保存する
+- [ロギングの設定およびログファイルへのアクセスに必要なアクセス許可](https://docs.aws.amazon.com/ja_jp/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html#AccessLogsBucketAndFileOwnership)
+- バケットポリシーではなく、アクセスコントロールリストを使う
+- `c4c1ede66af53448b93c283ce9448c4ba468c9432aa01d700d3878632f77d2d0`
