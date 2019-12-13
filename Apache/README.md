@@ -79,3 +79,18 @@ RewriteRule . /index.php [L]
 ```
 
 - 上記でリダイレクトしても`REQUEST_URI`ではリダイレクトする前のリクエストURIを取得することができます
+
+### 証明書の確認方法
+- [保存した証明書ファイルの内容を確認する方法](https://jp.globalsign.com/support/faq/07.html)
+- 証明書ファイルの内容を確認
+  ```
+  openssl x509 -text -noout -in /[FilePath]/[CertFile]
+  ```
+- 秘密鍵ファイルの内容を確認
+  ```
+  openssl rsa -text -noout -in /[FilePath]/[KeyFile]
+  ```
+- CSRファイルの内容を確認
+  ```
+  openssl req -text -noout -in /[FilePath]/[CSRFile]
+  ```
