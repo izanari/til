@@ -94,3 +94,7 @@ RewriteRule . /index.php [L]
   ```
   openssl req -text -noout -in /[FilePath]/[CSRFile]
   ```
+
+### Pricate tmpの
+- `/tmp`にはファイルが書き込めなくなっていることがある。
+  - そんなときはここを参照：[CentOS 7～8 : /tmp 直下にファイルが書き込めない](https://server.etutsplus.com/systemd-why-can-not-write-tmp-directory/)

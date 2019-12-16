@@ -7,6 +7,36 @@
   - トークンベースのLambdaオーソライザー（TOKENオーソライザーとも呼ばれる）は、JSON Web Token（JWT）やOAuthトークンなどのベアラートークンで呼び出し元のIDを受け取ります。
   - 要求パラメーターベースのLambdaオーソライザー（REQUESTオーソライザーとも呼ばれます）は、ヘッダー、クエリ文字列パラメーター、stageVariables、および$ context変数の組み合わせで呼び出し元のIDを受け取ります。
 - WebSocket APIではリクエストベースのみがサポートされている
+- Lambdaオーソライザーのサンプル
+  - 認証に使う情報が、ヘッダー、クエリ文字列に含まれていればよいが、ペイロードにしか存在しない場合は、Lambdaオーソライザーは使わずに、自力で認証をする必要がある
+  - Lambdaオーソライザーのレスポンスサンプル
+    ```
+    import json
+
+    def lambda_handler(event, context):
+        # TODO implement
+        # print(event)
+        # print(context)
+
+        return {
+                "principalId" : 1,
+                "policyDocument" : {
+                    "Version" : "2012-10-17",
+                    "Statement" : [
+                        {
+                            "Action": "execute-api:Invoke",
+                            "Effect": "Allow",
+                            "Resource": event["methodArn"] 
+                        }
+                    ]
+                },
+                "context": {
+                    "authorizedUser": ""
+                }
+        }
+    ```
+### Cognitoで認証をする
+- [Cognitoから払い出されたIdTokenをAPI Gateway カスタムオーソライザーのLambda(Python3.6)で検証する方法](https://dev.classmethod.jp/cloud/aws/verify_cognit_idtoken_by_apig_custom_auth/)
 ### IAMユーザーで認証する
 - リクエストを署名バージョン4を使用して著名する
   - [署名バージョン 4 署名プロセス](https://docs.aws.amazon.com/ja_jp/general/latest/gr/signature-version-4.html)
@@ -69,3 +99,16 @@
 - 統合のタイムアウト
   - Lambda、Lambda プロキシ、HTTP、HTTP プロキシ、AWS 統合など、すべての統合タイプで 50 ミリ秒～29 秒。
   - よって、Lambdaは30秒以上かかる場合はAPI Gatewayには向いていない
+
+## アクセスログを有効にする
+- `APIGatewayPushToCloudWatchLogs`をロールにアタッチして、API Gatewayに設定する
+- Cloud Watchのロググループは、`API-Gateway-Execution-Logs_(APIGW-ID)/stage`になります
+- ログを取得するかどうかは、APIのステージ毎に設定することができます
+- 参考URL
+  - [API Gateway CloudWatch の API ログ作成をセットアップする](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/set-up-logging.html)
+  - [【新機能】Amazon API Gateway でアクセスログを記録する](https://dev.classmethod.jp/server-side/serverless/aws-reinvent2017-api-gateway-access-log/)
+  - [API Gateway＋Lambdaでのステージ管理やCloudWatch Logsのログ運用のはなし](http://blog.serverworks.co.jp/tech/2017/02/01/apigateway-lambda-cloudwatchlogs/)
+
+
+## アクセスコントロール
+- [](https://dev.classmethod.jp/cloud/aws/api-gateway-resource-policy/)
