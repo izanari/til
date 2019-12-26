@@ -15,4 +15,10 @@ $ pyenv versions
 pyenv local 3.7.2
 ```
 
+- システム全体のバージョンをセットする
+```
+pyenv global 3.8.0
+```
+
+
 
