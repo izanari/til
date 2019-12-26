@@ -36,7 +36,8 @@ systemctl daemon-reload
 - パッケージをダウングレードする
   - `yum --showduplicate list packagename` で表示されれば可能です
   - `yum downgrade packagename`
-
+- 参考ドキュメント
+  - [Redhat系Linuxで、OSパッケージを戻す方法](https://qiita.com/sasasin/items/f865848239e7b0a38e06)
 ## find
 - 指定した日付（時間）のファイルを削除する
   - `mmin`：分
