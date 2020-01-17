@@ -15,5 +15,28 @@ mysql> select current_user();
 ```
 mysql> create database testdb default charset utf8;
 mysql> grant all on testdb.* to scott@localhost identified by 'tiger';
-mysql> grant all on testdb.* to scott@'%' identified by 'tiger';ß
+mysql> grant all on testdb.* to scott@'%' identified by 'tiger';
+```
+## ユーザー一覧を表示する
+```
+select Host,User from mysql.user;
++----------------------------------------------+--------+
+| Host                                         | User   |
++----------------------------------------------+--------+
+| 127.0.0.1                                    | root   |
+| ::1                                          | root   |
+| localhost                                    |        |
+| localhost                                    | scott  |
+| localhost                                    | root   |
++----------------------------------------------+--------+
+```
+## 権限の確認をする
+```
+MariaDB [(none)]> SHOW GRANTS FOR root@localhost;
++---------------------------------------------------------------------+
+| Grants for root@localhost                                           |
++---------------------------------------------------------------------+
+| GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION |
+| GRANT PROXY ON ''@'' TO 'root'@'localhost' WITH GRANT OPTION        |
++---------------------------------------------------------------------+
 ```
