@@ -118,6 +118,41 @@
             Tracing: Active
       ```
 
+- 動的なパラメータを利用する
+  - SSMパラメータに格納しておく方法
+    - `TestText`という名前を設定しておく
+    - `${Env}-TestText`という名前を設定しておく
+```
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  
+Parameters:
+  Env:
+    Type: String
+    Default: dev 
+    AllowedValues:
+      - dev
+      - stg
+      - prod
+  SsmParamVersion:
+    Type: String
+    Default: 1
+Resources:
+  LogicalID:
+    Type: "AWS::IAM::User"
+    Properties:
+      Tags:
+        - Key: Test 
+          Value: '{{resolve:ssm:TestText:1}}'
+      UserName: test-test
+  IamUser2:
+    Type: "AWS::IAM::User"
+    Properties:
+      Tags:
+        - Key: Test 
+          Value: !Sub '{{resolve:ssm:${Env}-TestText:${SsmParamVersion}}}'
+      UserName: test-test2
+```
 
 ## サンプル
 - [awslabs](https://github.com/awslabs/aws-cloudformation-templates)
