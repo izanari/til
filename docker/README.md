@@ -20,9 +20,15 @@ RUN \
 
 ## たまに使うコマンド
 ### コンテナが起動しないときにイメージを消す
+- 古いやり方
 ```
-docker images | awk '/<none/{print $3}' | xargs docker rmi
+docker images | awk '/<none/ {print $3}' | xargs docker rmi
 ```
+- 最近のやり方
+```
+docker image prune
+```
+
 ### 起動しないコンテナにログインする
 - 参考URL
   - https://gendosu.jp/archives/2838
