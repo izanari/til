@@ -48,6 +48,21 @@
     ExpiresDefault "access plus 60 minutes"
   </LocationMatch>
 ```
+- URL指定でキャッシュさせる
+```
+ExpiresActive On
+<LocationMatch "/common/img/logo_header.png$">
+        ExpiresDefault "access plus 60 minutes"
+</LocationMatch>
+```
+- 特定ディレクトリの特定拡張子をキャッシュさせる
+```
+ExpiresActive On
+<LocationMatch "/common/img/(.*)\.png$">
+        ExpiresDefault "access plus 60 minutes"
+</LocationMatch>
+```
+
 
 ### コンテンツを圧縮して配信する
 #### Apache2.2の場合
@@ -98,3 +113,35 @@ RewriteRule . /index.php [L]
 ### Pricate tmpの
 - `/tmp`にはファイルが書き込めなくなっていることがある。
   - そんなときはここを参照：[CentOS 7～8 : /tmp 直下にファイルが書き込めない](https://server.etutsplus.com/systemd-why-can-not-write-tmp-directory/)
+
+### X-Forwarded-ForのIPをRemote IPにする
+- Apache2.4の場合
+  - `remoteip_module`が組み込まれていること
+    - 確認方法
+    ```
+      % httpd -M | grep remoteip
+      remoteip_module (shared)
+    ``` 
+  - confに`RemoteIPHeader X-Forwarded-For`に追加する
+
+### Apacheの設定順
+- http://httpd.apache.org/docs/2.4/ja/sections.html#mergin
+
+
+### リダイレクト
+- 特定ディレクトリ配下をすべてリダイレクトさせたいけど、特定のディレクトリのみ(/a/b/c/)は除外する
+```
+RewriteBase /
+RewriteCond %{REQUEST_URI} ^/a/b/(.*)
+RewriteCond %{REQUEST_URI} !(^/a/b/c/)
+RewriteRule  ^(.*)$ https://%{HTTP_HOST}%/a/b/ccc/ [NC,R=301,L]
+```
+
+### 特定のURLのみヘッダーをつけない
+- 以下の記述を`.htaccess`などの記述します。この例は拡張子がwoff/woff2のときにはno-storeを付与しないという設定です
+  - 参考URL: http://httpd.apache.org/docs/current/expr.html
+```
+<If "%{REQUEST_URI} !~ /.woff$|.woff2$/">
+    Header set Cache-Control no-store
+</If>
+```
