@@ -51,27 +51,27 @@
 - イベントソース（同期・非同期）
 
 ### サポートされるイベントソース(2019年4月1日現在)  
-|イベントソース|タイプ|備考
-|---|---|---
-|S3|非同期|
-|DynamoDB|同期|ポーリングベース（ストリーム）
-|Kinesis Data Streams|同期|ポーリングベース（ストリーム）
-|SNS|非同期|
-|SES|非同期|
-|SQS|同期|ポーリングベース（非ストリーム）
-|Cognito|同期|
-|CloudFormation|同期|
-|CloudWatch Logs|同期|
-|CloudWatch イベント|非同期|
-|CodeCommit|非同期|
-|CloudWatch Events|非同期|
-|Config|非同期|
-|Alexa|同期|
-|Lex|同期|
-|API Gateway|同期|
-|Iotボタン|非同期|
-|CloudFront|同期|
-|Kinesis Data Firehose|同期|
+| イベントソース        | タイプ | 備考                             |
+| --------------------- | ------ | -------------------------------- |
+| S3                    | 非同期 |
+| DynamoDB              | 同期   | ポーリングベース（ストリーム）   |
+| Kinesis Data Streams  | 同期   | ポーリングベース（ストリーム）   |
+| SNS                   | 非同期 |
+| SES                   | 非同期 |
+| SQS                   | 同期   | ポーリングベース（非ストリーム） |
+| Cognito               | 同期   |
+| CloudFormation        | 同期   |
+| CloudWatch Logs       | 同期   |
+| CloudWatch イベント   | 非同期 |
+| CodeCommit            | 非同期 |
+| CloudWatch Events     | 非同期 |
+| Config                | 非同期 |
+| Alexa                 | 同期   |
+| Lex                   | 同期   |
+| API Gateway           | 同期   |
+| Iotボタン             | 非同期 |
+| CloudFront            | 同期   |
+| Kinesis Data Firehose | 同期   |
 
 ### 呼び出しタイプ
 - 非同期呼び出し
@@ -405,3 +405,9 @@
             def lambda_handler(event, context):
               print("Hello World")
     ``` 
+
+## チューニング
+- https://github.com/alexcasalboni/aws-lambda-power-tuning
+
+## 参考ドキュメント
+- [AWS Lambdaのスロットリング緩和](https://speakerdeck.com/_kensh/how-to-manage-throttling-for-aws-lambda)
