@@ -30,9 +30,10 @@ docker image prune
 ```
 
 ### 起動しないコンテナにログインする
-- 参考URL
-  - https://gendosu.jp/archives/2838
-  - https://qiita.com/ryurock/items/d1372e9b4d561343a308
+```
+docker commit exitedしたコンテナID 適当なコンテナ名
+docker run --rm -it 適当なコンテナ名 sh
+```
 
 ## Dockerfileの書き方サンプル
 ### echoした結果をファイルに出力する

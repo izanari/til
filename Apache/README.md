@@ -77,7 +77,12 @@ ExpiresActive On
 よく`SetOutputFilter DEFLATE`を記述しているサイトがあるが、これを記述するとMIMEタイプに関係なくすべてが圧縮されてしまいます。html/css/jsだけを圧縮したい場合は上記のように記述しましょう
 
 ### リダイレクト
+#### 参考するリソース
+- [Apache Module mod_rewrite](https://httpd.apache.org/docs/2.2/ja/mod/mod_rewrite.html)
 - [RewriteRuleのフラグと、RewriteCondの変数一覧](https://qiita.com/tsukaguitar/items/e37245260f0b1407341d)
+
+#### サンプル
+- 下記でリダイレクトしても`REQUEST_URI`ではリダイレクトする前のリクエストURIを取得することができます
 ```
 <IfModule mod_rewrite.c>
 RewriteEngine On
@@ -93,7 +98,14 @@ RewriteRule . /index.php [L]
 </IfModule>
 ```
 
-- 上記でリダイレクトしても`REQUEST_URI`ではリダイレクトする前のリクエストURIを取得することができます
+#### QUERYSTRINGをハッシュに変換したい場合のりライトルール
+- リライト先でQUERYSTRINGを引き継がせたくない場合は、`?`をつける
+- エスケープさせたくない場合は、`[NE]`をつける
+```
+RewriteCond %{REQUEST_URI} ^/search-result.html
+RewriteCond %{QUERY_STRING} (.+)
+RewriteRule ^search-result.html %{REQUEST_URI}#%1? [L,R=301,NE]
+```
 
 ### 証明書の確認方法
 - [保存した証明書ファイルの内容を確認する方法](https://jp.globalsign.com/support/faq/07.html)
