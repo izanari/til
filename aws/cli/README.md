@@ -1,6 +1,6 @@
 # AWS CLI
 ## [broamski/aws-mfa](https://github.com/broamski/aws-mfa)
-- 二段階認証を求められる場合、簡単に認証が取れるツール
+二段階認証を求められる場合、簡単に認証が取れるツール。Pythonが必要です。
 ### 設定
 - ~/.aws/credential に以下の設定をする。profile名の後に、`-long-term`をつける。
 ```
